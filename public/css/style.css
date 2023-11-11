@@ -1,0 +1,940 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap'); */
+@font-face {
+  font-family: themeFont;
+  src: url('/assets/hk-grotesk/HKGrotesk-Regular.otf');
+}
+
+:root {
+  --primary-color: #335eea;
+  --secondary-color: #869ab8;
+  --link-color: #506690;
+  --btn-translateY: -5px;
+}
+body {
+  font-family: themeFont;
+  /* font-family: 'Roboto', sans-serif; */
+  line-height: 1.6;
+  color: hsl(224, 34%, 13%);
+  background-color: #fff;
+}
+
+/* Util Class */
+.card-img-top {
+  width: 100%;
+  height: 20vh;
+  object-fit: cover;
+}
+
+#about .card,
+#features .card {
+  box-shadow: 0 1.5rem 4rem rgba(22, 28, 45, 0.15);
+}
+
+#about .card,
+#about .card-header,
+#about .card-footer {
+  background: #f9fbfd;
+  transition: all 0.8s;
+}
+
+#about .card:hover {
+  transform: translateY(-20px);
+}
+
+.container {
+  padding: 0 0 0 4.3rem;
+}
+
+.primary-color {
+  color: var(--primary-color);
+}
+
+.secondary-color {
+  color: var(--secondary-color);
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: var(--primary-color);
+  transition: all 0.2s ease-in;
+}
+
+.btn-primary:hover {
+  transform: translateY(var(--btn-translateY));
+}
+
+.btn-secondary {
+  transition: all 0.2s ease-in;
+}
+
+.btn-secondary:hover {
+  transform: translateY(var(--btn-translateY));
+}
+
+.btn-success {
+  transition: all 0.2s ease-in;
+}
+
+.btn-success:hover {
+  transform: translateY(var(--btn-translateY));
+}
+
+.lg-h {
+  font-size: 3rem;
+  font-weight: 350;
+  line-height: 1.2;
+  letter-spacing: -0.02rem;
+}
+
+.md-h {
+  font-size: 2.5rem;
+  font-weight: 300;
+  line-height: 1.2;
+  letter-spacing: -0.01rem;
+}
+
+/* Set the navbar color */
+
+.navbar {
+  background-color: #ffffff;
+  /* position: sticky; */
+  /* top: 0; */
+}
+
+.navbar .navbar-brand {
+  color: #335eea;
+  font-weight: bolder;
+  font-size: 1.7rem;
+  /* letter-spacing: 0.09rem; */
+}
+
+.navbar .navbar-text {
+  color: #506690;
+}
+.navbar .navbar-text a {
+  color: #335eea;
+}
+.navbar .navbar-text a:hover,
+.navbar .navbar-text a:focus {
+  color: #335eea;
+}
+.navbar .navbar-nav .nav-link {
+  color: #506690;
+  border-radius: 0.25rem;
+  margin: 0 0.25em;
+}
+.navbar .navbar-nav .nav-link:not(.disabled):hover,
+.navbar .navbar-nav .nav-link:not(.disabled):focus {
+  color: #335eea;
+}
+.navbar .navbar-nav .nav-item.active .nav-link,
+.navbar .navbar-nav .nav-item.active .nav-link:hover,
+.navbar .navbar-nav .nav-item.active .nav-link:focus,
+.navbar .navbar-nav .nav-item.show .nav-link,
+.navbar .navbar-nav .nav-item.show .nav-link:hover,
+.navbar .navbar-nav .nav-item.show .nav-link:focus {
+  color: #335eea;
+  background-color: #ffffff;
+}
+.navbar .navbar-toggle {
+  border-color: #ffffff;
+}
+.navbar .navbar-toggle:hover,
+.navbar .navbar-toggle:focus {
+  background-color: #ffffff;
+}
+.navbar .navbar-toggle .navbar-toggler-icon {
+  color: #506690;
+}
+.navbar .navbar-collapse,
+.navbar .navbar-form {
+  border-color: #506690;
+}
+.navbar .navbar-link {
+  color: #506690;
+}
+.navbar .navbar-link:hover {
+  color: #335eea;
+}
+
+@media (max-width: 575px) {
+  .navbar-expand-sm .navbar-nav .show .dropdown-menu .dropdown-item {
+    color: #506690;
+  }
+  .navbar-expand-sm .navbar-nav .show .dropdown-menu .dropdown-item:hover,
+  .navbar-expand-sm .navbar-nav .show .dropdown-menu .dropdown-item:focus {
+    color: #335eea;
+  }
+  .navbar-expand-sm .navbar-nav .show .dropdown-menu .dropdown-item.active {
+    color: #335eea;
+    background-color: #ffffff;
+  }
+}
+
+@media (max-width: 767px) {
+  .navbar-expand-md .navbar-nav .show .dropdown-menu .dropdown-item {
+    color: #506690;
+  }
+  .navbar-expand-md .navbar-nav .show .dropdown-menu .dropdown-item:hover,
+  .navbar-expand-md .navbar-nav .show .dropdown-menu .dropdown-item:focus {
+    color: #335eea;
+  }
+  .navbar-expand-md .navbar-nav .show .dropdown-menu .dropdown-item.active {
+    color: #335eea;
+    background-color: #ffffff;
+  }
+}
+
+@media (max-width: 991px) {
+  .navbar-expand-lg .navbar-nav .show .dropdown-menu .dropdown-item {
+    color: #506690;
+  }
+  .navbar-expand-lg .navbar-nav .show .dropdown-menu .dropdown-item:hover,
+  .navbar-expand-lg .navbar-nav .show .dropdown-menu .dropdown-item:focus {
+    color: #335eea;
+  }
+  .navbar-expand-lg .navbar-nav .show .dropdown-menu .dropdown-item.active {
+    color: #335eea;
+    background-color: #ffffff;
+  }
+}
+
+@media (max-width: 1199px) {
+  .navbar-expand-xl .navbar-nav .show .dropdown-menu .dropdown-item {
+    color: #506690;
+  }
+  .navbar-expand-xl .navbar-nav .show .dropdown-menu .dropdown-item:hover,
+  .navbar-expand-xl .navbar-nav .show .dropdown-menu .dropdown-item:focus {
+    color: #335eea;
+  }
+  .navbar-expand-xl .navbar-nav .show .dropdown-menu .dropdown-item.active {
+    color: #335eea;
+    background-color: #ffffff;
+  }
+}
+
+.navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item {
+  color: #506690;
+}
+.navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item:hover,
+.navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item:focus {
+  color: #335eea;
+}
+.navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item.active {
+  color: #335eea;
+  background-color: #ffffff;
+}
+
+.navbar .nav-item .nav-link {
+  font-weight: 600;
+  transition: color 500ms;
+  font-size: 1rem;
+  letter-spacing: 0.1rem;
+}
+
+.navbar .navbar-nav {
+  margin-left: 10rem;
+}
+
+.navbar-nav .dropdown-menu {
+  box-shadow: 0 1.5rem 4rem rgba(22, 28, 45, 0.15);
+  border: none;
+  padding: 1rem 0rem;
+  /* transition: all 5s; */
+}
+
+.navbar .navbar-nav .dropdown-menu .dropdown-item {
+  color: #506690;
+  transition: color 0.4s ease;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.08rem;
+  padding: 0.4rem 1.4rem;
+  /* border-bottom: 1px dotted #f4f4f4; */
+}
+
+.navbar .navbar-nav .dropdown-menu .dropdown-item:hover {
+  background-color: #fff;
+  color: #335eea;
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateY(1rem);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0rem);
+    opacity: 1;
+  }
+  0% {
+    transform: translateY(1rem);
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes slideIn {
+  0% {
+    -webkit-transform: transform;
+    -webkit-opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    -webkit-opacity: 1;
+  }
+  0% {
+    -webkit-transform: translateY(1rem);
+    -webkit-opacity: 0;
+  }
+}
+
+.slideIn {
+  -webkit-animation-name: slideIn;
+  animation-name: slideIn;
+  animation-duration: 0.3s;
+  -webkit-animation-duration: 0.3s;
+  animation-fill-mode: both;
+  -webkit-animation-fill-mode: both;
+}
+
+/********************************************** Header: Showcase *********************************************/
+#showcase {
+  height: 100vh;
+}
+
+#showcase {
+  /* margin-top: 8rem; */
+  /* overflow: hidden; */
+  padding: 1rem 0;
+}
+
+/* #showcase .showcase-text h1 {
+} */
+
+#showcase .showcase-text {
+  animation: showcaseTextAnimate 1.5s forwards;
+  transition: all 1s ease;
+  /* margin-top: 0rem; */
+  margin-top: 9rem;
+}
+
+@keyframes showcaseTextAnimate {
+  from {
+    transform: translateY(5rem);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+#showcase .showcase-img {
+  animation: showcaseImgAnimate 2s forwards;
+  transition: all 1s ease;
+  margin-top: 7rem;
+}
+
+@keyframes showcaseImgAnimate {
+  from {
+    transform: translateY(5rem);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+#showcase #showcaseHighlights {
+  opacity: 0;
+  transform: translateY(80px);
+  transition: transform 1s ease;
+}
+
+#showcase .customShowcase {
+  animation: animateShowcaseHighlights 1.5s forwards;
+  transition: transform 1s ease;
+}
+
+@keyframes animateShowcaseHighlights {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+#showcase #showcaseHighlights {
+  margin-top: 9rem;
+}
+
+#showcase #showcaseHighlights .fa {
+  color: #fff;
+  background-color: var(--primary-color);
+  border-radius: 10%;
+}
+#showcase #showcaseHighlights p {
+  font-size: 1.1rem;
+}
+
+/***************************************** About ********************************************/
+#about {
+  margin-top: 14rem;
+  background: #f9fbfd;
+  border-top: 1px solid #f9fbfd;
+}
+
+.cardLeft,
+.cardRight {
+  opacity: 0;
+  transition: transform 1s ease;
+}
+
+#about .animateCardLeft {
+  animation: customLeftAnimation 1.5s forwards;
+  transition: transform 1s ease;
+}
+
+#about .animateCardRight {
+  animation: customRightAnimation 1.5s forwards 1s;
+  transition: transform 1s ease;
+}
+
+@keyframes customLeftAnimation {
+  from {
+    transform: translateX(-100px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes customRightAnimation {
+  from {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+#about .fa,
+#features .fa {
+  color: #fff;
+  background: var(--primary-color);
+  border-radius: 10%;
+}
+
+/*************************************** Features *************************************/
+#features {
+  background: #f1f4f8;
+  border-top: 1px solid #f1f4f8;
+  /* color: #fff; */
+}
+
+.featureLeft,
+.featureRight {
+  opacity: 0;
+  transition: transform 1.5s ease;
+}
+
+.animateFeatureLeft {
+  animation: customLeftFeatureAnimation 1.5s forwards;
+  transition: transform 1.5s ease;
+}
+
+.animateFeatureRight {
+  animation: customRightFeatureAnimation 1.5s forwards 0.5s;
+  transition: transform 1.5s ease;
+}
+
+@keyframes customLeftFeatureAnimation {
+  from {
+    transform: translateX(-200px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes customRightFeatureAnimation {
+  from {
+    transform: translateX(200px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/**************************************** Contact ************************************/
+#contact {
+  background: #f9fbfd;
+  border-top: 1px solid #f9fbfd;
+}
+
+.contact-form,
+.contact-image {
+  opacity: 0;
+  transition: transform 1s ease;
+}
+
+.input {
+  background: transparent;
+  border-color: transparent;
+  border-bottom: 2px solid #ccc;
+  border-radius: 0;
+  transition: all 0.8s;
+}
+
+.input:focus {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  color: var(--secondary-color);
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.label {
+  color: #777;
+  display: block;
+  margin-top: -70px;
+  margin-left: 4px;
+  font-size: 13px;
+  transition: all 0.3s;
+}
+
+.input:placeholder-shown + .label {
+  transform: translate(20px, 20px);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.select {
+  background: transparent;
+  border-color: transparent;
+  border-bottom: 2px solid #ccc;
+  border-radius: 0;
+  transition: all 0.8s;
+}
+
+.select:focus {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  color: var(--secondary-color);
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.select:placeholder-shown + .label {
+  transform: translate(20px, 20px);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.option {
+  background: #f9fbfd;
+  border: none;
+}
+
+#contact .contact-image img {
+  transform: skewX(-8deg) translate(5.5rem, 6rem);
+}
+
+.animateContactLeft {
+  animation: customLeftAnimation 1.5s forwards;
+  transition: transform 1s ease;
+}
+
+.animateContactRight {
+  animation: customRightAnimation 1.5s forwards 1s;
+  transition: transform 1s ease;
+}
+
+/* ******************************Footer*************************************** */
+#footer {
+  background: #f1f4f8;
+  border-top: 1px solid #f1f4f8;
+  color: var(--secondary-color);
+}
+
+#footer a {
+  color: var(--link-color);
+  text-decoration: none;
+  transition: color 0.5s ease;
+}
+
+#footer ol {
+  background: #f1f4f8;
+}
+
+#footer a:hover {
+  color: var(--primary-color);
+}
+
+/* ***************************************************************************************************
+                        RESPONSIVE STYLES
+******************************************************************************************************/
+/* For widescreen layout */
+@media (min-width: 1500px) {
+  .container {
+    padding: 0 0 0 0;
+  }
+
+  #about {
+    padding: 0;
+  }
+
+  .mainNavbar {
+    margin-left: 8rem;
+    width: 100%;
+  }
+
+  .mainNavbar ul {
+    width: 100%;
+  }
+}
+
+/* Nav */
+@media (max-width: 991px) {
+  .container {
+    padding: 0 0 0 0;
+  }
+}
+
+@media (max-width: 537px) {
+  #sideNavHeading {
+    font-size: 1.5rem;
+  }
+}
+
+/* Header */
+/* Iphone X Landscape */
+@media (min-width: 810px) and (max-height: 376px) {
+  #about {
+    margin-top: 40rem !important;
+  }
+
+  #about .card {
+    width: 80% !important;
+    margin: auto !important;
+  }
+
+  #about .card-img-top {
+    height: 30vh !important;
+  }
+}
+
+/* Iphone 5 potrait */
+@media (min-width: 300px) and (max-width: 359px) {
+  #showcase .showcase-text {
+    margin-top: 0 !important;
+  }
+
+  #about {
+    margin-top: 60rem !important;
+  }
+}
+
+/* Iphone 5 Landscape */
+@media (min-height: 320px) and (max-height: 320px) {
+  #about {
+    margin-top: 65rem !important;
+  }
+
+  #about .card {
+    width: 50%;
+    margin: 1rem auto !important;
+  }
+
+  .card-img-top {
+    height: 30vh !important;
+  }
+}
+
+/* Galaxy and Iphone 6 potrait */
+@media (max-width: 600px) {
+  #showcase .showcase-img {
+    padding: 0 2rem;
+    margin: 0;
+    margin-top: 1rem;
+    margin-left: 1rem;
+  }
+
+  #showcase .showcase-img img {
+    width: 100%;
+  }
+
+  #showcase .showcase-text {
+    padding: 0;
+    margin: 0;
+    padding: 2rem;
+    margin-left: 1rem;
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  #showcase .showcase-text h1 {
+    font-size: 2rem;
+  }
+
+  #showcase .showcase-text p {
+    font-size: 1.2rem;
+  }
+
+  /* Showcase Highlights-Header */
+  #showcase #showcaseHighlights {
+    margin: 0;
+    padding: 1rem 2rem;
+    margin-top: 4rem;
+  }
+
+  #showcase #showcaseHighlights div {
+    /* padding: 1rem 0; */
+    margin: 1rem 0;
+  }
+
+  /* About */
+
+  #about {
+    margin: 0;
+    padding: 0;
+    padding: 2rem;
+    width: 100%;
+    margin-top: 60rem;
+    /* width: 100vw; */
+  }
+
+  #about h1 {
+    font-size: 2rem;
+  }
+
+  #about p {
+    font-size: 1.2rem;
+  }
+
+  #about .card {
+    margin: 2rem 0rem;
+  }
+
+  #about .card:first-child {
+    margin-top: 0;
+  }
+
+  #features h1 {
+    font-size: 2rem;
+  }
+
+  #features p {
+    font-size: 1.2rem;
+  }
+
+  #contact .contact-image img {
+    display: none;
+  }
+}
+
+/* Iphone plus series potrait */
+@media (min-width: 410px) and (max-width: 637px) {
+  #about {
+    margin: 0;
+    padding: 0;
+    padding: 2rem;
+    width: 100%;
+    margin-top: 49rem;
+  }
+}
+
+/* Landscape of Galaxy and Iphone 6  */
+@media (min-width: 638px) and (max-width: 767px) {
+  #showcase .showcase-img {
+    padding: 0 2rem;
+    margin: 0;
+    margin-top: 1rem;
+    margin-left: 1rem;
+  }
+
+  #showcase .showcase-img img {
+    width: 100%;
+  }
+
+  #showcase .showcase-text {
+    padding: 0;
+    margin: 0;
+    padding: 2rem;
+    margin-left: 1rem;
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  #showcase .showcase-text h1 {
+    font-size: 2rem;
+  }
+
+  #showcase .showcase-text p {
+    font-size: 1.2rem;
+  }
+
+  /* Showcase Highlights-Header */
+  #showcase #showcaseHighlights {
+    margin: 0;
+    padding: 1rem 2rem;
+    margin-top: 4rem;
+  }
+
+  #showcase #showcaseHighlights div {
+    padding: 1rem 0;
+  }
+
+  /* About */
+  #about {
+    margin: 0;
+    padding: 0;
+    padding: 2rem !important;
+    margin-top: 68rem;
+  }
+
+  #about h1 {
+    font-size: 2rem;
+  }
+
+  #about p {
+    font-size: 1.2rem;
+  }
+
+  #about .card {
+    width: 60%;
+    margin: 2rem auto;
+  }
+
+  .card-img-top {
+    width: 100%;
+    height: 40vh;
+    object-fit: cover;
+  }
+
+  #about .card:first-child {
+    margin-top: 0;
+  }
+  #contact .contact-image img {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  #about {
+    margin-top: 0;
+  }
+  #contact .contact-image img {
+    display: none;
+  }
+}
+
+/*************************************************RETAIL LINKS**********************************************
+
+
+***************************************************************************************************************/
+
+.section-1,
+.section-2 {
+  opacity: 0;
+  transition: all 2s ease;
+}
+
+.retailSectionAnimate {
+  animation: customretailSectionAnimation 2s forwards;
+  transition: all 2s ease;
+}
+
+@keyframes customretailSectionAnimation {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.section-2 .lead + p {
+  color: var(--secondary-color);
+}
+
+@media (max-width: 768px) {
+  .section-1 h1,
+  .section-2 h1 {
+    font-size: 2.2rem;
+  }
+
+  .section-1 p {
+    font-size: 1.1rem;
+    margin-left: 0.2rem;
+  }
+
+  .section-2 p {
+    font-weight: bold;
+  }
+
+  .section-2 .lead {
+    color: #161c2c;
+  }
+}
+
+/**********************************Contact Page *******************************************/
+#contact-page .contact-image-page img {
+  transform: skewX(-5deg) translate(5.5rem, 2rem);
+}
+
+@media (min-width: 200px) and (max-width: 768px) {
+  #contact-page {
+    height: 100vh;
+  }
+
+  #contact-page .contact-form-page {
+    margin-top: 4rem;
+  }
+
+  #contact-page .contact-image-page img {
+    display: none;
+  }
+}
+
+/* Downloads */
+#guest-files {
+  height: 100vh;
+}
+
+/* Button to scroll to the top of the page */
+
+#myBtn {
+  display: none; /* Hidden by default */
+  position: fixed; /* Fixed/sticky position */
+  bottom: 20px; /* Place the button at the bottom of the page */
+  right: 10px; /* Place the button 30px from the right */
+  z-index: 99; /* Make sure it does not overlap */
+  border: none; /* Remove borders */
+  outline: none; /* Remove outline */
+  background-color: var(--primary-color); /* Set a background color */
+  color: white; /* Text color */
+  cursor: pointer; /* Add a mouse pointer on hover */
+  padding: 10px; /* Some padding */
+  border-radius: 5px; /* Rounded corners */
+  font-size: 15px; /* Increase font size */
+}
+
+#myBtn:hover {
+  background-color: #555; /* Add a dark-grey background on hover */
+}
