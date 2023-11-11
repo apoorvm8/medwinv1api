@@ -17,7 +17,7 @@ class Einvoice extends Model
      * @var array
      */
     protected $fillable = [
-        'acctno', 'active', 'install_date', 'next_amc_date', 'remarks'
+        'acctno', 'active', 'install_date', 'next_amc_date', 'remarks', 'username', 'password', 'ipaddress'
     ];
 
     // address is combination of subadd1, subadd2, subadd3

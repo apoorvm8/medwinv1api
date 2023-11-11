@@ -21,6 +21,9 @@ return new class extends Migration
             $table->date('install_date')->nullable();
             $table->date('next_amc_date')->nullable();
             $table->text('remarks')->nullable();
+            $table->string('username', 255)->nullable();
+            $table->string('password', 255)->nullable();
+            $table->string('ipaddress', 255)->nullable();
             $table->timestamps();
         });
     }
