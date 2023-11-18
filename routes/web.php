@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\Software\FileApiController;
 use App\Http\Controllers\Web\CustomerMsgController;
 use App\Http\Controllers\Web\PagesController;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::post('/backup-file-bysoft', [FileApiController::class, 'backupFileBySoft']);
+
 
 Route::get('/', [PagesController::class, 'index'])->name('index');
 Route::get('/contact', [PagesController::class, 'contact'])->name('contact');
