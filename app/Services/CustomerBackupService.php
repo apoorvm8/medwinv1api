@@ -83,7 +83,7 @@ class CustomerBackupService
                   $arr["name"] = $file->name;
                   $arr["created_at"] = Carbon::parse($file->created_at)->format('d/m/Y, g:i A');
                   $arr["lastUploadedAt"] = isset($file->lastUploadedAt) ? Carbon::parse($file->lastUploadedAt)->format('d/m/Y, g:i A') : null;
-                  $arr["fileSize"] = round($file["fileSize"] / pow(2, 20), 2);
+                  $arr["fileSize"] = $file->file_size;
                   $arr["path"] = $file->path;
                   $fileArr[] = $arr;
               }
@@ -102,7 +102,7 @@ class CustomerBackupService
                   $arr["name"] = $file->name;
                   $arr["created_at"] = Carbon::parse($file->created_at)->format('d/m/Y, g:i A');
                   $arr["lastUploadedAt"] = isset($file->lastUploadedAt) ? Carbon::parse($file->lastUploadedAt)->format('d/m/Y, g:i A') : null;
-                  $arr["fileSize"] = round($file["fileSize"] / pow(2, 20), 2);
+                  $arr["fileSize"] = $file->file_size;
                   $arr["path"] = $file->path;
                   $fileArr[] = $arr;
               }
