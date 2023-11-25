@@ -4,6 +4,8 @@ use App\Http\Controllers\API\Auth\AuthApiController;
 use App\Http\Controllers\API\Customer\CustomerApiController;
 use App\Http\Controllers\API\Customer\EinvoiceApiController;
 use App\Http\Controllers\API\Folder\FolderApiController;
+use App\Http\Controllers\API\Software\CustomerDataApiController;
+use App\Http\Controllers\API\Software\FileApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,6 +19,14 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+// API RELATED TO SOFTWARE
+Route::post('/upload-customer-stock', [FileApiController::class, 'uploadStockBySoft']);
+Route::get('/download-customer-stock',[FileApiController::class, 'downloadStockBySoft']);
+
+Route::prefix('medwincustomer')->group(function() {
+    Route::get('getbackup', [CustomerDataApiController::class, 'getBackup']);
+});
+// END
 
 Route::group(['prefix' => 'auth'], function() {
     Route::post('/login', [AuthApiController::class, 'login']);

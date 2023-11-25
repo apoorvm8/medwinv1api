@@ -5,7 +5,10 @@ namespace App\Services;
 use App\Models\CustomerBackup;
 use App\Models\CustomerStockAccess;
 use App\Models\Einvoice;
+use App\Models\FolderMaster;
 use App\Traits\HashIds;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
 class CustomerBackupService
@@ -63,5 +66,49 @@ class CustomerBackupService
          $customerBackup->delete();
       });
    }
+
+   public function getBackupByType($type = "currentyear", $customerFolder) : array {
+      $fileArr = [];
+      if($type == "currentyear") {
+          $folder = FolderMaster::where('parent_id', $customerFolder->id)->where('name', 'currentyear')->where('depth', 3)->where('resource_type', FolderMaster::RESOURCE_TYPE_FOLDER)->first(); 
+          $fileArr = [];
+          if(!$folder) {
+              $fileArr = [];
+          } else {
+              $fileLst = FolderMaster::where('parent_id', $folder->id)->where('depth', 4)->where('resource_type', FolderMaster::RESOURCE_TYPE_FILE)->orderby('created_at', 'asc')->get();
+              $fileArr = [];
+              foreach($fileLst as $key => $file) {
+                  $arr = [];
+                  $arr["id"] = Crypt::encrypt($file->id);
+                  $arr["name"] = $file->name;
+                  $arr["created_at"] = Carbon::parse($file->created_at)->format('d/m/Y, g:i A');
+                  $arr["lastUploadedAt"] = isset($file->lastUploadedAt) ? Carbon::parse($file->lastUploadedAt)->format('d/m/Y, g:i A') : null;
+                  $arr["fileSize"] = round($file["fileSize"] / pow(2, 20), 2);
+                  $arr["path"] = $file->path;
+                  $fileArr[] = $arr;
+              }
+          }        
+      } else if($type == "lastyear") {
+          $folder = FolderMaster::where('parent_id', $customerFolder->id)->where('name', 'lastyear')->where('depth', 3)->where('resource_type', FolderMaster::RESOURCE_TYPE_FOLDER)->first(); 
+          $fileArr = [];
+          if(!$folder) {
+              $fileArr = [];
+          } else {
+              $fileLst = FolderMaster::where('parent_id', $folder->id)->where('depth', 4)->where('resource_type', FolderMaster::RESOURCE_TYPE_FILE)->orderby('created_at', 'asc')->get();
+              $fileArr = [];
+              foreach($fileLst as $key => $file) {
+                  $arr = [];
+                  $arr["id"] = Crypt::encrypt($file->id);
+                  $arr["name"] = $file->name;
+                  $arr["created_at"] = Carbon::parse($file->created_at)->format('d/m/Y, g:i A');
+                  $arr["lastUploadedAt"] = isset($file->lastUploadedAt) ? Carbon::parse($file->lastUploadedAt)->format('d/m/Y, g:i A') : null;
+                  $arr["fileSize"] = round($file["fileSize"] / pow(2, 20), 2);
+                  $arr["path"] = $file->path;
+                  $fileArr[] = $arr;
+              }
+          }        
+      }
+      return $fileArr;
+  }
 }
 
