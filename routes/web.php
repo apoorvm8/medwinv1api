@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/backup-file-bysoft', [FileApiController::class, 'backupFileBySoft']);
+Route::get('/downloadBySoft', [FileApiController::class, 'downloadBySoft']);
+Route::get('/downloadBySoftOther', [FileApiController::class, 'downloadBySoftOther']);
+Route::post('/uploadBySoft', [FileApiController::class, 'uploadBySoft']);
 
 
 Route::get('/', [PagesController::class, 'index'])->name('index');

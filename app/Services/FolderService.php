@@ -534,6 +534,10 @@ class FolderService
       $path = $resource->path;
 
       if($resource->resource_type == FolderMaster::RESOURCE_TYPE_FOLDER) {
+         $resource->last_downloaded_at = now();
+         $resource->times_downloaded = intval($resource->times_downloaded) + 1;
+         $resource->save();
+         
          $files = Storage::disk('s3')->allFiles($path);
 
          if(count($files) == 0) {
