@@ -502,7 +502,8 @@ class FileApiController extends Controller
         $cuserid = $request->cuserid;
         $outletid = $request->outletid;
         $fileName = $request->filename;
-  
+        $fileName = substr($fileName, 1); // remove slash, since it is coming from software
+
         $customer = CustomerData::find($cuserid);
         $outlet = CustomerData::find($outletid);
         
