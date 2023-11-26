@@ -531,6 +531,7 @@ class FileApiController extends Controller
             return response(['success' => false, 'msg' => 'Outlet Folder Not Found'], Response::HTTP_NOT_FOUND); 
 
         // Get the actual file, we will keep the name as folder only
+        $fileName = $fileName . ".csv";
         $folder = FolderMaster::where('name', $fileName)->where('depth', 3)->where('resource_type', FolderMaster::RESOURCE_TYPE_FILE)->where('parent_id', $outletFolder->id)->first();
 
         if(!$folder)
