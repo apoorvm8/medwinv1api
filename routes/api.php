@@ -25,6 +25,12 @@ Route::get('/download-customer-stock',[FileApiController::class, 'downloadStockB
 
 Route::prefix('medwincustomer')->group(function() {
     Route::get('getbackup', [CustomerDataApiController::class, 'getBackup']);
+    Route::post('submit', [CustomerDataApiController::class, 'submit']);    
+    Route::get('getdate', [CustomerDataApiController::class, 'getDate']);
+    Route::post('register', [CustomerDataApiController::class, 'register']);
+    Route::get('einvoice-status', [CustomerDataApiController::class, 'getEinvoiceStatus']);
+    Route::post('einvoice-update', [CustomerDataApiController::class, 'updateEinvoice']);
+    Route::post('service-update', [CustomerApiController::class, 'serviceUpdate']);
 });
 // END
 
