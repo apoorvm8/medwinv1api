@@ -22,13 +22,14 @@ class CustomerData extends Model
         'state', 'interstate', 'importsw',
         'softwaretype', 'installdate', 'nextamcdate',
         'amcamount', 'recvamount', 'activestatus',
-        'acctcode', 'sub3code', 'email', 'created_at', 'updated_at', 'narration'
+        'acctcode', 'sub3code', 'email', 'created_at', 'updated_at', 'narration',
+        'softref'
     ];
 
     // address is combination of subadd1, subadd2, subadd3
     public const SEARCHABLE = [
         'acctno', 'subdesc', 'address', 'installdate', 'nextamcdate', 'subphone', 'amcamount',
-        'narration', 'area', 'state'
+        'narration', 'area', 'state', 'softref'
     ];
 
     public function eInvoice() : HasOne {
