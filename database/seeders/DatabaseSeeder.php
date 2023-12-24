@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use Database\Seeders\Customer\CustomerAmcDuePermissionSeeder;
 use Database\Seeders\Customer\CustomerBackupPermissionSeeder;
 use Database\Seeders\Customer\CustomerEinvoicePermissionSeeder;
 use Database\Seeders\Customer\CustomerMasterPermissionSeeder;
@@ -35,7 +36,8 @@ class DatabaseSeeder extends Seeder
             CustomerBackupPermissionSeeder::class,
             CustomerStockAccessPermissionSeeder::class,
             FolderPermissionSeeder::class,
-            CustomerWhatsappPermissionSeeder::class
+            CustomerWhatsappPermissionSeeder::class,
+            CustomerAmcDuePermissionSeeder::class,
         ]);
     }
 }

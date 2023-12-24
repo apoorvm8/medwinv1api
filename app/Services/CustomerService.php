@@ -45,6 +45,19 @@ class CustomerService
          }
       }
 
+      // Get by amc date
+      if(isset($params['dateFilter'])) {
+         $dateFilter = json_decode($params['dateFilter'], true);
+         
+         // Check Date filter
+         if(isset($dateFilter['date1']) && isset($dateFilter['date2']) && isset($dateFilter['col'])) {
+            $date1 = $dateFilter['date1'];
+            $date2 = $dateFilter['date2'];
+            $col = $dateFilter['col'];
+            $query->whereBetween($col, [$date1, $date2]);
+         }
+      }
+
       if(isset($params['sortOrder']) && $params['sortOrder']) {
          $sortOrder = json_decode($params['sortOrder'], true);
          $query->orderBy($sortOrder['field'], $sortOrder['sort']);
@@ -223,7 +236,7 @@ class CustomerService
             $data['customer'] = CustomerData::count();
          
          if(in_array('customer_backup_view', $userPermissions)) 
-            $data['customer'] = CustomerBackup::count();
+            $data['backup'] = CustomerBackup::count();
          
          if(in_array('customer_stockaccess_view', $userPermissions)) 
             $data['stock'] = CustomerStockAccess::count();
