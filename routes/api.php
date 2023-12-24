@@ -66,6 +66,7 @@ Route::group(['prefix' => 'customers', 'middleware' => ['auth:sanctum']], functi
     Route::delete('/customer-registers/bulk-delete', [CustomerApiController::class, 'bulkDeleteCustomerRegisters'])->middleware('permission:customer_register_delete');
     Route::get('/customer-whatsapps', [CustomerApiController::class, 'getCustomerWhatsapps'])->middleware('permission:customer_whatsapp_view');
     Route::get('/customer-dashboard-details', [CustomerApiController::class, 'getCustomerDashboardDetails']);
+    Route::get('/customer-amc-due', [CustomerApiController::class, 'getCustomerAmcDue'])->middleware('permission:customer_amcdue_view');
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

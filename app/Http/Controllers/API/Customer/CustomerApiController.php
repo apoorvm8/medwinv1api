@@ -83,4 +83,13 @@ class CustomerApiController extends Controller
             ]
         ]);
     }
+
+    public function getCustomerAmcDue(Request $request) {
+        $data = app(CustomerService::class)->getCustomerAmcDue($request, auth('sanctum')->user());
+        return response([
+            'success' => true, 'msg' => 'Customer Amc Due list', 'data' => [
+                'customeramcdue' => $data
+            ]
+        ]);
+    }
 }
