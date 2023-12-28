@@ -25,7 +25,7 @@ class CustomerBackupService
          // $query->where('subdesc',$params["quickFilter"]);
 
          $query->where(function($sql) use($keyword) {
-            foreach(CustomerStockAccess::SEARCHABLE as $field) {
+            foreach(CustomerBackup::SEARCHABLE as $field) {
    
                if($field == "customer_backups.install_date") {
                   $sql->orWhere(DB::raw("DATE_FORMAT(customer_backups.install_date,'%d/%m/%Y')"), 'LIKE', "%".$keyword."%");
@@ -53,6 +53,12 @@ class CustomerBackupService
             $query->where('active', $status["value"]);
          }
       }
+
+      if(isset($params['sortOrder']) && $params['sortOrder']) {
+         $sortOrder = json_decode($params['sortOrder'], true);
+         $query->orderBy($sortOrder['field'], $sortOrder['sort']);
+      }
+
       return $query->paginate($params["pageSize"], ['*'], 'page', $params['page']);
    }
 
