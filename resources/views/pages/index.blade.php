@@ -306,7 +306,7 @@
         <div class="row mt-5">
             <div class="col">
                 <p class="secondary-color"><i class="fa fa-phone primary-color"></i> Call Us: +91-9212705931
-                    (Mr. Shravan Jaiswal)
+                    (Mr. Shrawan Jaiswal)
                 </p>
                 <p class="secondary-color"> <i class="fa fa-envelope primary-color"></i> Email:
                     Medwinsoftware@gmail.com,
