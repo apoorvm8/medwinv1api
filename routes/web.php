@@ -21,6 +21,10 @@ Route::get('/downloadBySoft', [FileApiController::class, 'downloadBySoft']);
 Route::get('/downloadBySoftOther', [FileApiController::class, 'downloadBySoftOther']);
 Route::post('/uploadBySoft', [FileApiController::class, 'uploadBySoft']);
 
+// Redirect to frontend
+Route::get('/admin', function() {
+    return redirect(config('app.frontend_url'));
+});
 
 Route::get('/', [PagesController::class, 'index'])->name('index');
 Route::get('/contact', [PagesController::class, 'contact'])->name('contact');

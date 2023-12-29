@@ -26,6 +26,12 @@ class CustomerRegisterService
                 $query->orWhere($field, 'LIKE', '%'.$keyword.'%');
             }
         }
+
+        if(isset($params['sortOrder']) && $params['sortOrder']) {
+            $sortOrder = json_decode($params['sortOrder'], true);
+            $query->orderBy($sortOrder['field'], $sortOrder['sort']);
+         }
+         
         return $query->paginate($params["pageSize"], ['*'], 'page', $params['page']);
     }
 

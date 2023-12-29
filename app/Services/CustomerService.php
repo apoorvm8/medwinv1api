@@ -25,24 +25,26 @@ class CustomerService
       if(isset($params["quickFilter"]) && $params["quickFilter"]) {
          $keyword = $params["quickFilter"];
          // $query->where('subdesc',$params["quickFilter"]);
-         foreach(CustomerData::SEARCHABLE as $field) {
-            if($field == 'address') {
-               $query->orWhere(DB::raw('concat(COALESCE(subadd1, ""), " " , COALESCE(subadd2,""), " ", COALESCE(subadd3,""))'), 'LIKE', "%".$keyword."%");
-               continue;
+         $query->where(function($sql) use($keyword) {
+            foreach(CustomerData::SEARCHABLE as $field) {
+               if($field == 'address') {
+                  $sql->orWhere(DB::raw('concat(COALESCE(subadd1, ""), " " , COALESCE(subadd2,""), " ", COALESCE(subadd3,""))'), 'LIKE', "%".$keyword."%");
+                  continue;
+               }
+   
+               if($field == "installdate") {
+                  $sql->orWhere(DB::raw("DATE_FORMAT(installdate,'%d/%m/%Y')"), 'LIKE', "%".$keyword."%");
+                  continue;
+               }
+   
+               if($field == "nextamcdate") {
+                  $sql->orWhere(DB::raw("DATE_FORMAT(nextamcdate,'%d/%m/%Y')"), 'LIKE', "%".$keyword."%");
+                  continue;
+               }
+   
+               $sql->orWhere($field, 'LIKE', '%'.$keyword.'%');
             }
-
-            if($field == "installdate") {
-               $query->orWhere(DB::raw("DATE_FORMAT(installdate,'%d/%m/%Y')"), 'LIKE', "%".$keyword."%");
-               continue;
-            }
-
-            if($field == "nextamcdate") {
-               $query->orWhere(DB::raw("DATE_FORMAT(nextamcdate,'%d/%m/%Y')"), 'LIKE', "%".$keyword."%");
-               continue;
-            }
-
-            $query->orWhere($field, 'LIKE', '%'.$keyword.'%');
-         }
+         });
       }
 
       // Get by amc date
@@ -55,6 +57,13 @@ class CustomerService
             $date2 = $dateFilter['date2'];
             $col = $dateFilter['col'];
             $query->whereBetween($col, [$date1, $date2]);
+         }
+      }
+
+      if(isset($params["status"]) && $params["status"]) {
+         $status = json_decode($params["status"], true);
+         if($status["value"] != -1) {
+            $query->where('activestatus', $status["value"]);
          }
       }
 

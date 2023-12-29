@@ -50,19 +50,19 @@
                 </li>
             </ul>
         </li>
-        <li class="{{request()->is('downloads') ? 'active' : ''}}">
+        {{-- <li class="{{request()->is('downloads') ? 'active' : ''}}">
             <a class="nav-link" href="{{route('downloads')}}"><i class="fa fa-download"></i> Download</a>
-        </li>
+        </li> --}}
         <li class="{{request()->is('contact') ? 'active' : ''}}">
             <a id="contactAnchor" href="{{ !(request()->is('/')) ? route('contact') : '#contact' }}"><i
                     class="fa fa-address-book"></i> Contact</a>
         </li>
         <hr>
-        <li class="nav-item my-auto">
+        {{-- <li class="nav-item my-auto">
             <a data-toggle="modal" data-target="#customerLoginModal" class="btn btn-primary btn-sm w-50 ml-2 px-0 pb-2 pt-1"
                 href="javascript:void(0);"><i class="fa fa-user"></i> Login
             </a>
-        </li>
+        </li> --}}
     </ul>
 </nav>
 
@@ -101,18 +101,18 @@
                     </div>
                 </li>
 
-                <li class="nav-item {{request()->is('downloads') ? 'active' : ''}}">
+                {{-- <li class="nav-item {{request()->is('downloads') ? 'active' : ''}}">
                     <a class="nav-link" href="{{route('downloads')}}">Download</a>
-                </li>
+                </li> --}}
                 <li class="nav-item mr-3 {{ request()->is('contact') ? 'active' : ''}}">
                     <a class="toggle-to-error nav-link"
                         href="{{ !(request()->is('/')) ? route('contact') : '#contact' }}">Contact</a>
                 </li>
-                <li class="nav-item my-auto">
+                {{-- <li class="nav-item my-auto">
                     <a data-toggle="modal" data-target="#customerLoginModal" class="btn btn-primary btn-sm"
                         href="javascript:void(0);"><i class="fa fa-user mr-1"></i> Login
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </div>
     </div>

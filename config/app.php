@@ -212,5 +212,6 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
-    'hash_min_length' => env('HASH_MIN_LENGTH', 20)
+    'hash_min_length' => env('HASH_MIN_LENGTH', 20),
+    'frontend_url' => env('FRONTEND_URL', 'app.medwinsoftwares.in')
 ];
