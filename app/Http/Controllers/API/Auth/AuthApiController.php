@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\API\User\UserResource;
 use App\Models\User;
 use ArgumentCountError;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -48,7 +49,7 @@ class AuthApiController extends Controller
         try {
             // Delete the previous tokens of this user
             $user->tokens()->delete();
-            $token = $user->createToken(config('sanctum.sanctum_key'))->plainTextToken;
+            $token = $user->createToken(config('sanctum.sanctum_key'), ['*'], Carbon::now()->addHours(2))->plainTextToken;
         } catch(ArgumentCountError $ex) {
             return response(['success' => false, 'msg' => $ex->getMessage(), 'data' => []], Response::HTTP_INTERNAL_SERVER_ERROR);        
         }

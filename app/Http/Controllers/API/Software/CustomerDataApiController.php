@@ -103,7 +103,7 @@ class CustomerDataApiController extends Controller
                     'importsw' => $request->importsw, 'softwaretype' => $request->softwaretype, 'installdate' => $request->softwaretype, 
                     'installdate' => $installdate, 'nextamcdate' => $nextamcdate, 'amcamount' => $request->amcamount, 'recvamount' => $request->recvamount,
                     'acctcode' => $request->acctcode, 'sub3code' => $request->sub3code, 'email' => $request->email, 
-                    'createdon' => $customerdata->createdon, 'modifiedon' => now(), 'narration' => $request->narration, 'softref' => $request->softref
+                    'created_at' => $customerdata->created_at, 'updated_at' => now(), 'narration' => $request->narration, 'softref' => $request->softref
                 ]);
                 
                 $msg = 'Customer Data Updated Successfully';
@@ -114,7 +114,7 @@ class CustomerDataApiController extends Controller
                     'gstno' => $request->gstno, 'area' => $request->area, 'state' => $request->state, 'interstate' => $request->interstate, 
                     'importsw' => $request->importsw, 'softwaretype' => $request->softwaretype, 'installdate' => $request->softwaretype, 
                     'installdate' => $installdate, 'nextamcdate' => $nextamcdate, 'amcamount' => $request->amcamount, 'recvamount' => $request->recvamount,
-                    'activestatus' => 'Y', 'acctcode' => $request->acctcode, 'sub3code' => $request->sub3code, 'email' => $request->email, 'createdon' => now(),
+                    'activestatus' => 'Y', 'acctcode' => $request->acctcode, 'sub3code' => $request->sub3code, 'email' => $request->email, 'created_at' => now(),
                     'narration' => $request->narration, 'softref' => $request->softref
                 ]);
                 $msg = 'Customer Data Saved Successfully';

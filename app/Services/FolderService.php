@@ -48,7 +48,7 @@ class FolderService
    * @param array data
    * @return void
    */
-   public function createFolder($data) {
+   public function createFolder($data, $userId) {
       $permissionRows = null;
       $actionType = null;
       $acctNo = null;
@@ -113,7 +113,7 @@ class FolderService
             }
          }
 
-         DB::transaction(function () use($data, $parentFolder, $parentPath, $permissionRows, $actionType, $acctNo){
+         DB::transaction(function () use($data, $parentFolder, $parentPath, $permissionRows, $actionType, $acctNo, $userId){
             // Make the S3 folder
             $created = Storage::disk('s3')->makeDirectory($parentPath . '/' . Arr::get($data, 'name'));
             if(!$created) {
@@ -126,7 +126,7 @@ class FolderService
             Arr::set($data, 'children_count', json_encode(['folders' => 0, 'files' => 0]));
             Arr::set($data, 'resource_type', FolderMaster::RESOURCE_TYPE_FOLDER);
             Arr::set($data, 'created_at', now());
-            Arr::set($data, 'created_by', 1);
+            Arr::set($data, 'created_by', $userId);
             Arr::set($data, 'path', $parentPath . '/' . Arr::get($data, 'name'));
             Arr::set($data, 'parent_id', $parentFolder->id);
             $createdFolder = FolderMaster::create($data);
@@ -141,9 +141,9 @@ class FolderService
                   // Create entry in backup table
                   // Recursive Create the child folders -> currentyear and lastyear
                   $this->createFolder(['parent_id' => $this->encode(['id' => $createdFolder->id]), 'name' => 'currentyear', 
-                  'permissionRows' => $permissionRows]);
+                  'permissionRows' => $permissionRows], $userId);
                   $this->createFolder(['parent_id' => $this->encode(['id' => $createdFolder->id]), 'name' => 'lastyear',
-                  'permissionRows' => $permissionRows]);
+                  'permissionRows' => $permissionRows], $userId);
                   $this->resetChildCountUp($parentFolder);
 
                   CustomerBackup::create([
@@ -442,7 +442,7 @@ class FolderService
     * @desc Function to upload multiple files to s3
     * @return void
     */
-   public function uploadFiles($data) {
+   public function uploadFiles($data, $userId) {
       $folderFiles = Arr::get($data, 'folderFiles');
       $id = $this->decode(Arr::get($data, 'id'));
       $folder = FolderMaster::find($id);
@@ -476,7 +476,7 @@ class FolderService
             $tempFile["resource_type"] = FolderMaster::RESOURCE_TYPE_FILE;
             $tempFile["resource_module"] = $resourceModule;
             $tempFile["created_at"] = now();
-            $tempFile["created_by"] = 1;
+            $tempFile["created_by"] = $userId;
             
             $files[] = $tempFile;
          } else {
@@ -491,7 +491,7 @@ class FolderService
       }
       
       try {
-         DB::transaction(function () use($folder, $files, $folderFiles, $toUpdateFiles){
+         DB::transaction(function () use($folder, $files, $folderFiles, $toUpdateFiles, $userId){
 
             // Upload the files
             foreach($folderFiles as $folderFile) {
@@ -509,7 +509,7 @@ class FolderService
             }
 
             if(count($toUpdateFiles) > 0) {
-               $this->updateFileSize($toUpdateFiles);
+               $this->updateFileSize($toUpdateFiles, $userId);
             }
             // Add total size in upwards direction
             $this->resetFolderSizeUp($folder);
@@ -731,11 +731,11 @@ class FolderService
       }
    }
 
-   public function updateFileSize($toUpdateFiles) {
+   public function updateFileSize($toUpdateFiles, $userId) {
       foreach($toUpdateFiles as $file) {
          $file->file_size = number_format(Storage::disk('s3')->size($file->path)/pow(1024, 2), 1);
          $file->updated_at = now();
-         $file->updated_by = 1;
+         $file->updated_by = $userId;
          $file->save();
       }
    }

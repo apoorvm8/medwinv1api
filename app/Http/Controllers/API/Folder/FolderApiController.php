@@ -37,7 +37,7 @@ class FolderApiController extends Controller
     * @return JsonResponse
     */
     public function store(Request $request) {
-        $this->folderService->createFolder($request->input());
+        $this->folderService->createFolder($request->input(), auth('sanctum')->user()->id);
         return response(['success' => true, 'msg' => 'Folder created successfully.', 'data' => []]);
     }
 
@@ -49,7 +49,7 @@ class FolderApiController extends Controller
     */
     public function edit(Request $request) {
         $folder = $this->folderService->editFolder($request->input());
-        return response(['success' => true, 'msg' => 'Folder edited successfully.', 'data' => ['folder' => new FolderResource($folder)]]);
+        return response(['success' => true, 'msg' => 'Folder details edited successfully.', 'data' => ['folder' => new FolderResource($folder)]]);
     }
 
     /**
@@ -68,7 +68,7 @@ class FolderApiController extends Controller
      * @return JsonResponse
      */
     public function uploadFiles(UploadFileRequest $request) {
-        $this->folderService->uploadFiles($request->all());
+        $this->folderService->uploadFiles($request->all(), auth('sanctum')->user()->id);
         return response(['success' => true, 'msg' => count($request->folderFiles) . " Files uploaded successfully.", 'data' => []]);
     }
 
