@@ -48,7 +48,7 @@ class FolderService
    * @param array data
    * @return void
    */
-   public function createFolder($data, $userId) {
+   public function createFolder($data, $userId = null) {
       $permissionRows = null;
       $actionType = null;
       $acctNo = null;
@@ -442,7 +442,7 @@ class FolderService
     * @desc Function to upload multiple files to s3
     * @return void
     */
-   public function uploadFiles($data, $userId) {
+   public function uploadFiles($data, $userId = null) {
       $folderFiles = Arr::get($data, 'folderFiles');
       $id = $this->decode(Arr::get($data, 'id'));
       $folder = FolderMaster::find($id);
@@ -731,7 +731,7 @@ class FolderService
       }
    }
 
-   public function updateFileSize($toUpdateFiles, $userId) {
+   public function updateFileSize($toUpdateFiles, $userId = null) {
       foreach($toUpdateFiles as $file) {
          $file->file_size = number_format(Storage::disk('s3')->size($file->path)/pow(1024, 2), 1);
          $file->updated_at = now();

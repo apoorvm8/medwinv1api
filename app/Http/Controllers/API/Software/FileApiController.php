@@ -150,7 +150,7 @@ class FileApiController extends Controller
                     if(!$uploaded) {
                         return response(['success' => false, 'msg' => 'Error in uploading file while updating mode, please contact admin'], Response::HTTP_INTERNAL_SERVER_ERROR);
                     }
-                    app(FolderService::class)->updateFileSize([$file]);
+                    app(FolderService::class)->updateFileSize([$file], null);
                     $data = ['msg' => 'Id of uploaded file','id' => $file->id];
                 } else {
                     $slug = SlugService::createSlug(FolderMaster::class, 'slug', $fileName, ['unique' => true]);
@@ -325,7 +325,7 @@ class FileApiController extends Controller
                     if(!$uploaded) {
                         return response(['success' => false, 'msg' => 'Error in uploading file while updating mode, please contact admin'], Response::HTTP_INTERNAL_SERVER_ERROR);
                     }
-                    app(FolderService::class)->updateFileSize([$file]);
+                    app(FolderService::class)->updateFileSize([$file], null);
                     $data = ['msg' => 'Id of uploaded file','id' => $file->id];
                 } else {
                     $slug = SlugService::createSlug(FolderMaster::class, 'slug', $fileName, ['unique' => true]);
@@ -450,7 +450,7 @@ class FileApiController extends Controller
                     if(!$uploaded) {
                         return response(['success' => false, 'msg' => 'Error in uploading file while updating mode, please contact admin'], Response::HTTP_INTERNAL_SERVER_ERROR);
                     }
-                    app(FolderService::class)->updateFileSize([$file]);
+                    app(FolderService::class)->updateFileSize([$file], null);
                     $data = ['msg' => 'Id of uploaded file','id' => $file->id];
                 } else {
                     $slug = SlugService::createSlug(FolderMaster::class, 'slug', $fileName, ['unique' => true]);
