@@ -213,5 +213,6 @@ return [
     ])->toArray(),
 
     'hash_min_length' => env('HASH_MIN_LENGTH', 20),
-    'frontend_url' => env('FRONTEND_URL', 'http://app.medwinsoftwares.in')
+    'frontend_url' => env('FRONTEND_URL', 'http://app.medwinsoftwares.in'),
+    'mainuseremail' => env('MAINUSEREMAIL', 'shrawan@medwin.com')
 ];
