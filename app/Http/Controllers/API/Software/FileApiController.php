@@ -7,6 +7,7 @@ use App\Models\CustomerBackup;
 use App\Models\CustomerData;
 use App\Models\CustomerStockAccess;
 use App\Models\FolderMaster;
+use App\Models\User;
 use App\Services\FolderService;
 use App\Traits\HashIds;
 use Cviebrock\EloquentSluggable\Services\SlugService;
@@ -175,10 +176,29 @@ class FileApiController extends Controller
                     }
     
                     $resource = FolderMaster::create($tempFile);
-    
+                    // Get email id of shrawan jaiswal
+                    $user = User::where('email', config('app.mainuseremail'))->first();
+                    if($user) {
+                        // Create Folder Permission for this file 
+                        $permissionRow = [
+                            'view' => 1,
+                            'create' => 0,
+                            'edit' => 0,
+                            'info' => 1,
+                            'download' => 1,
+                            'upload' => 0,
+                            'user_id' => $this->encode(['id' => $user->id]),
+                            'folder_id' => null,
+                            'delete' => 0,
+                            'permission' => false,
+                            'applychild' => false
+                        ];
+                        app(FolderService::class)->updateUserFolderPermissions([$permissionRow], $this->encode(['id' => $resource->id]), true, null);
+                    }
+                    
                     $data = ['msg' => 'Id of uploaded file', 'id' => $resource->id];
                 }
-
+                
                 app(FolderService::class)->resetFolderSizeUp($folder);
                 app(FolderService::class)->resetChildCountUp($folder);
                 return response()->json(['success' => true, 'msg' => 'File uploaded successfully.', 'data' => $data], Response::HTTP_OK);               
@@ -350,6 +370,26 @@ class FileApiController extends Controller
                     }
     
                     $resource = FolderMaster::create($tempFile);
+
+                    // Get email id of shrawan jaiswal
+                    $user = User::where('email', config('app.mainuseremail'))->first();
+                    if($user) {
+                        // Create Folder Permission for this file 
+                        $permissionRow = [
+                            'view' => 1,
+                            'create' => 0,
+                            'edit' => 0,
+                            'info' => 1,
+                            'download' => 1,
+                            'upload' => 0,
+                            'user_id' => $this->encode(['id' => $user->id]),
+                            'folder_id' => null,
+                            'delete' => 0,
+                            'permission' => false,
+                            'applychild' => false
+                        ];
+                        app(FolderService::class)->updateUserFolderPermissions([$permissionRow], $this->encode(['id' => $resource->id]), true, null);
+                    }
     
                     $data = ['msg' => 'Id of uploaded file', 'id' => $resource->id];
                 }
@@ -475,6 +515,26 @@ class FileApiController extends Controller
                     }
     
                     $resource = FolderMaster::create($tempFile);
+
+                    // Get email id of shrawan jaiswal
+                    $user = User::where('email', config('app.mainuseremail'))->first();
+                    if($user) {
+                        // Create Folder Permission for this file 
+                        $permissionRow = [
+                            'view' => 1,
+                            'create' => 0,
+                            'edit' => 0,
+                            'info' => 1,
+                            'download' => 1,
+                            'upload' => 0,
+                            'user_id' => $this->encode(['id' => $user->id]),
+                            'folder_id' => null,
+                            'delete' => 0,
+                            'permission' => false,
+                            'applychild' => false
+                        ];
+                        app(FolderService::class)->updateUserFolderPermissions([$permissionRow], $this->encode(['id' => $resource->id]), true, null);
+                    }
     
                     $data = ['msg' => 'Id of uploaded file', 'id' => $resource->id];
                 }

@@ -132,7 +132,7 @@ class FolderService
             $createdFolder = FolderMaster::create($data);
             $this->resetChildCountUp($parentFolder);
             if($permissionRows) {
-               $this->updateUserFolderPermissions($permissionRows, $createdFolder->id);
+               $this->updateUserFolderPermissions($permissionRows, $this->encode(['id' => $createdFolder->id]), true, $userId);
             }
 
             // If action type is present, then based on value create the entry in respective child table
@@ -300,13 +300,43 @@ class FolderService
     * @param int folderId
     * @return void
     */
-   public function updateUserFolderPermissions($permissionRows, $folderId, $toUpdate = false) {
+   public function updateUserFolderPermissions($permissionRows, $folderId, $toUpdate = false, $createdByUserId = null) {
       // Loop through permissionRows if all flags are false then that row will not be created in table to save space
-      if($toUpdate) {
-         $folderId = $this->decode($folderId, "Folder");
-      }
-
+      $folderId = $this->decode($folderId, "Folder");
+     
       foreach($permissionRows as $permissionRow) {
+         // Check if permission row has applychild set to true
+         $permissionRow['permission'] = false;
+         $mainFolder = FolderMaster::find($folderId);
+         if($mainFolder->resource_type == FolderMaster::RESOURCE_TYPE_FILE) {
+            $permissionRow['upload'] = false;
+            $permissionRow['applytochild'] = false;
+            $permissionRow['create'] = false;
+            $permissionRow['edit'] = false;
+         }
+
+         if($permissionRow['applychild']) {
+            $permissionRow['applychild'] = false; // set to false so it dosen't go in infinite loop.
+            // Get the Folder path from 
+            $path = $mainFolder->path;
+            $allFolders = Storage::disk('s3')->allDirectories($path);
+            $allFiles = Storage::disk('s3')->allFiles($path);
+            // Loop through alll allfodlers
+            foreach($allFolders as $folderItem) {
+               $childFolder = FolderMaster::where('path', $folderItem)->first();
+               if($childFolder) {
+                  $this->updateUserFolderPermissions([$permissionRow], $this->encode(['id' => $childFolder->id]), $toUpdate, $createdByUserId);
+               }
+            }
+
+            foreach($allFiles as $fileItem) {
+               $childFile = FolderMaster::where('path', $fileItem)->first();
+               if($childFile) {
+                  $this->updateUserFolderPermissions([$permissionRow], $this->encode(['id' => $childFile->id]), $toUpdate, $createdByUserId);
+               }
+            }
+         }
+
          $shouldCreate = false;
          $userId = $this->decode($permissionRow["user_id"]);
          foreach(FolderMaster::PERMISSION_KEYS as $key) {
@@ -328,7 +358,7 @@ class FolderService
                   'upload' => $permissionRow['upload'],
                   'download' => $permissionRow['download'],
                   'created_at' => now(),
-                  'created_by' => auth('sanctum')->user()->id
+                  'created_by' => $createdByUserId
                ]);
             } else {
                $checkPermissionRow = FolderPermission::where('folder_id', $folderId)->where('user_id', $userId)->first();
@@ -343,7 +373,7 @@ class FolderService
                      'upload' => $permissionRow['upload'],
                      'download' => $permissionRow['download'],
                      'updated_at' => now(),
-                     'updated_by' => auth('sanctum')->user()->id
+                     'updated_by' => $createdByUserId
                   ]); 
                } else {
                   FolderPermission::create([
@@ -358,7 +388,7 @@ class FolderService
                      'upload' => $permissionRow['upload'],
                      'download' => $permissionRow['download'],
                      'created_at' => now(),
-                     'created_by' => auth('sanctum')->user()->id
+                     'created_by' => $createdByUserId
                   ]);
                }
             }
@@ -639,7 +669,6 @@ class FolderService
                $arr["to_update"] = false;
             }
          } else {
-
             // Extract the permissions from the table and assign
             $folderPermissions = FolderPermission::where('folder_id', $id)->where('user_id', $user->id)
             ->first(['id', 'folder_id', 'view', 'create', 'edit', 'info', 'permission', 'delete', 'upload', 'download']);
@@ -659,6 +688,7 @@ class FolderService
                }
             }
          }
+         $arr['applychild'] = false;
          $data[] = $arr;
       } 
       // Prepare the data

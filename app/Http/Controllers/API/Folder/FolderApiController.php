@@ -106,7 +106,7 @@ class FolderApiController extends Controller
      * @desc Function to return the permissions of folder by users
      */
     public function updateUserFolderPermissions(Request $request, $id) {
-        $data = $this->folderService->updateUserFolderPermissions($request->stateRows, $id, true);
+        $data = $this->folderService->updateUserFolderPermissions($request->stateRows, $id, true, auth('sanctum')->user()->id);
         return response(['succcess' => true, 'msg' => 'Folder permissions updated successfully.', 'data' => [
             'permissions' => $data
         ]]);
