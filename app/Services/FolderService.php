@@ -130,7 +130,7 @@ class FolderService
             Arr::set($data, 'path', $parentPath . '/' . Arr::get($data, 'name'));
             Arr::set($data, 'parent_id', $parentFolder->id);
             $createdFolder = FolderMaster::create($data);
-            $this->resetChildCountUp($parentFolder);
+            // $this->resetChildCountUp($parentFolder);
             if($permissionRows) {
                $this->updateUserFolderPermissions($permissionRows, $this->encode(['id' => $createdFolder->id]), true, $userId);
             }
@@ -144,7 +144,7 @@ class FolderService
                   'permissionRows' => $permissionRows], $userId);
                   $this->createFolder(['parent_id' => $this->encode(['id' => $createdFolder->id]), 'name' => 'lastyear',
                   'permissionRows' => $permissionRows], $userId);
-                  $this->resetChildCountUp($parentFolder);
+                  // $this->resetChildCountUp($parentFolder);
 
                   CustomerBackup::create([
                      'acctno' => $acctNo, 'folder_id' => $createdFolder->id, 'active' => 1, 'created_at' => now(),
@@ -436,12 +436,12 @@ class FolderService
    
                if($shouldDeleteFolder) {
                   $this->deleteDescendantNodes($folder);
-                  $this->resetChildCountUp(FolderMaster::find($folder->parent_id));
-                  $this->resetFolderSizeUp(FolderMaster::find($folder->parent_id));
+                  // $this->resetChildCountUp(FolderMaster::find($folder->parent_id));
+                  // $this->resetFolderSizeUp(FolderMaster::find($folder->parent_id));
                } else {
                   $this->deleteDescendantNodes_WithoutOriginFolder($folder);
-                  $this->resetChildCountUp($folder);
-                  $this->resetFolderSizeUp($folder);
+                  // $this->resetChildCountUp($folder);
+                  // $this->resetFolderSizeUp($folder);
                }
             }); 
          } catch(Exception $ex) {
@@ -457,8 +457,8 @@ class FolderService
                   throw new Exception("Error in deleting s3 file");
                }
               
-               $this->resetChildCountUp(FolderMaster::find($folder->parent_id));
-               $this->resetFolderSizeUp(FolderMaster::find($folder->parent_id));
+               // $this->resetChildCountUp(FolderMaster::find($folder->parent_id));
+               // $this->resetFolderSizeUp(FolderMaster::find($folder->parent_id));
                $folder->delete();
             }); 
          } catch(Exception $ex) {
@@ -538,14 +538,14 @@ class FolderService
                FolderMaster::insert($files);
             }
 
-            if(count($toUpdateFiles) > 0) {
-               $this->updateFileSize($toUpdateFiles, $userId);
-            }
+            // if(count($toUpdateFiles) > 0) {
+            //    $this->updateFileSize($toUpdateFiles, $userId);
+            // }
             // Add total size in upwards direction
-            $this->resetFolderSizeUp($folder);
+            // $this->resetFolderSizeUp($folder);
 
             // Add the total file count in upwards manner.
-            $this->resetChildCountUp($folder);
+            // $this->resetChildCountUp($folder);
             
          }); 
       } catch(Exception $ex) {
@@ -635,9 +635,30 @@ class FolderService
    public function getFolderInfo($id) {
       $id = $this->decode($id);
       $folder = FolderMaster::find($id);
+      $size = 0;
       if(!$folder) 
          throw new Exception("Folder not found", Response::HTTP_NOT_FOUND);
+   
+      $path = $folder->path ? $folder->path : 'root';
+      $folder->path = $path;
 
+      if($folder->resource_type == FolderMaster::RESOURCE_TYPE_FOLDER) {
+         $arr = [0];
+         foreach(Storage::disk('s3')->allFiles($path) as $file) {
+            $arr[] = Storage::disk('s3')->size($file);
+         }
+         // Size in MB 
+         $folder->file_size = array_sum($arr);
+         $numberOfFileFolder = [
+            'files' => count(Storage::disk('s3')->allFiles($path)),
+            'folders' => count(Storage::disk('s3')->allDirectories($path))
+         ];
+         $folder->children_count = json_encode($numberOfFileFolder);
+      } else {
+         $folder->file_size = Storage::disk('s3')->size($folder->path);
+      }
+      
+      $folder->save();
       return $folder;
    }
 
