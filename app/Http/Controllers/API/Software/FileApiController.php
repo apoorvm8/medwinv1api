@@ -129,8 +129,8 @@ class FileApiController extends Controller
                         return response(['success' => false, 'msg' => 'Error in deleting oldest backup file. Please contact web admin'], Response::HTTP_INTERNAL_SERVER_ERROR);
                      }
                      
-                    app(FolderService::class)->resetChildCountUp(FolderMaster::find($oldestFile->parent_id));
-                    app(FolderService::class)->resetFolderSizeUp(FolderMaster::find($oldestFile->parent_id));
+                    // app(FolderService::class)->resetChildCountUp(FolderMaster::find($oldestFile->parent_id));
+                    // app(FolderService::class)->resetFolderSizeUp(FolderMaster::find($oldestFile->parent_id));
                     $oldestFile->delete();
                 }
 
@@ -151,7 +151,9 @@ class FileApiController extends Controller
                     if(!$uploaded) {
                         return response(['success' => false, 'msg' => 'Error in uploading file while updating mode, please contact admin'], Response::HTTP_INTERNAL_SERVER_ERROR);
                     }
-                    app(FolderService::class)->updateFileSize([$file], null);
+                    // app(FolderService::class)->updateFileSize([$file], null);
+                    $file->updated_at = now();
+                    $file->save();
                     $data = ['msg' => 'Id of uploaded file','id' => $file->id];
                 } else {
                     $slug = SlugService::createSlug(FolderMaster::class, 'slug', $fileName, ['unique' => true]);
@@ -199,8 +201,8 @@ class FileApiController extends Controller
                     $data = ['msg' => 'Id of uploaded file', 'id' => $resource->id];
                 }
                 
-                app(FolderService::class)->resetFolderSizeUp($folder);
-                app(FolderService::class)->resetChildCountUp($folder);
+                // app(FolderService::class)->resetFolderSizeUp($folder);
+                // app(FolderService::class)->resetChildCountUp($folder);
                 return response()->json(['success' => true, 'msg' => 'File uploaded successfully.', 'data' => $data], Response::HTTP_OK);               
             } else {
                 return response()->json(['success' => false, 'msg' => 'Please provide a file to upload'], 401);
@@ -345,7 +347,9 @@ class FileApiController extends Controller
                     if(!$uploaded) {
                         return response(['success' => false, 'msg' => 'Error in uploading file while updating mode, please contact admin'], Response::HTTP_INTERNAL_SERVER_ERROR);
                     }
-                    app(FolderService::class)->updateFileSize([$file], null);
+                    // app(FolderService::class)->updateFileSize([$file], null);
+                    $file->updated_at = now();
+                    $file->save();
                     $data = ['msg' => 'Id of uploaded file','id' => $file->id];
                 } else {
                     $slug = SlugService::createSlug(FolderMaster::class, 'slug', $fileName, ['unique' => true]);
@@ -394,8 +398,8 @@ class FileApiController extends Controller
                     $data = ['msg' => 'Id of uploaded file', 'id' => $resource->id];
                 }
 
-                app(FolderService::class)->resetFolderSizeUp($folder);
-                app(FolderService::class)->resetChildCountUp($folder);
+                // app(FolderService::class)->resetFolderSizeUp($folder);
+                // app(FolderService::class)->resetChildCountUp($folder);
                 return response()->json(['success' => true, 'msg' => 'File uploaded successfully.', 'data' => $data], Response::HTTP_OK);               
             } else {
                 return response()->json(['success' => false, 'msg' => 'Please provide a file to upload'], 401);
@@ -490,7 +494,9 @@ class FileApiController extends Controller
                     if(!$uploaded) {
                         return response(['success' => false, 'msg' => 'Error in uploading file while updating mode, please contact admin'], Response::HTTP_INTERNAL_SERVER_ERROR);
                     }
-                    app(FolderService::class)->updateFileSize([$file], null);
+                    // app(FolderService::class)->updateFileSize([$file], null);
+                    $file->updated_at = now();
+                    $file->save();
                     $data = ['msg' => 'Id of uploaded file','id' => $file->id];
                 } else {
                     $slug = SlugService::createSlug(FolderMaster::class, 'slug', $fileName, ['unique' => true]);
@@ -539,8 +545,8 @@ class FileApiController extends Controller
                     $data = ['msg' => 'Id of uploaded file', 'id' => $resource->id];
                 }
 
-                app(FolderService::class)->resetFolderSizeUp($folder);
-                app(FolderService::class)->resetChildCountUp($folder);
+                // app(FolderService::class)->resetFolderSizeUp($folder);
+                // app(FolderService::class)->resetChildCountUp($folder);
                 return response()->json(['success' => true, 'msg' => 'File uploaded successfully.', 'data' => $data], Response::HTTP_OK);   
             } else {
                 return response()->json(['success' => false, 'msg' => 'Please provide a file to upload'], 401);
