@@ -60,4 +60,8 @@ class PagesController extends Controller
         Meta::setTitle('Sitemap');
         return view('pages.sitemap');
     }
+
+    public function file_download(Request $request, $fileId) {
+        return;
+    }
 }
