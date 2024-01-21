@@ -194,6 +194,8 @@ class CustomerService
             $customerStockAccess->save();
             $msg = $customerStockAccess->active == 1 ? "Customer stock access enabled successfully." : "Customer stock access disabled successfully";
             return $msg;
+         } else {
+            throw new Exception("Customer stock access needs to be turned on for $customer->acctno first.");
          }
       });
       return $msg;
@@ -207,6 +209,8 @@ class CustomerService
             $customerBackupAccess->save();
             $msg = $customerBackupAccess->active == 1 ? "Customer backup enabled successfully." : "Customer backed disabled successfully.";
             return $msg;
+         } else {
+            throw new Exception("Customer backup needs to be turned on for $customer->acctno first.");
          }
       });
       return $msg;
