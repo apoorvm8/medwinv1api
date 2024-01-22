@@ -612,7 +612,9 @@ class FolderService
                
                $path_parts = pathinfo($url);
                
-               header('Access-Control-Allow-Origin: *');
+               if($path_parts['extension'] != 'txt') {
+                  header('Access-Control-Allow-Origin: *');
+               }
                header('Access-Control-Allow-Methods: *');
                header('Access-Control-Allow-Headers: *');
                header("Content-type: application/octet-stream");
