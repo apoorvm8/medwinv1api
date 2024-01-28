@@ -6,10 +6,13 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class CustomerData extends Model
+
+class CustomerData extends Authenticatable
 {
     use HasFactory;
+    protected $guard = 'customer'; // telling the model which gaurd to use
     protected $table = 'customer_data';
     protected $primaryKey = 'acctno';
     public $timestamps = false;    
@@ -23,7 +26,7 @@ class CustomerData extends Model
         'softwaretype', 'installdate', 'nextamcdate',
         'amcamount', 'recvamount', 'activestatus',
         'acctcode', 'sub3code', 'email', 'created_at', 'updated_at', 'narration',
-        'softref'
+        'softref', 'password'
     ];
 
     // address is combination of subadd1, subadd2, subadd3

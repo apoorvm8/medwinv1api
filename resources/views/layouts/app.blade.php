@@ -157,7 +157,7 @@
                 clearForm(['customerLoginForm'], false, true);
 
                 $.ajax({
-                    url: '',
+                    url: '{!! route('customer.login') !!}',
                     method: 'POST',
                     data: {
                         _token:'{{csrf_token()}}',

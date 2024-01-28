@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\API\Software\FileApiController;
+use App\Http\Controllers\Web\Auth\CustomerLoginController;
 use App\Http\Controllers\Web\CustomerMsgController;
+use App\Http\Controllers\Web\CustomersController;
 use App\Http\Controllers\Web\PagesController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +26,17 @@ Route::post('/uploadBySoft', [FileApiController::class, 'uploadBySoft']);
 // Redirect to frontend
 Route::get('/admin', function() {
     return redirect(config('app.frontend_url'));
+});
+
+Route::group(['prefix' => 'customer'], function() {
+    Route::post('/login', [CustomerLoginController::class, 'login'])->name('customer.login');
+    Route::get('/', [CustomersController::class, 'dashboard'])->name('customer.dashboard');
+    Route::post('/logout', [CustomerLoginController::class, 'logout'])->name('customer.logout');
+    Route::get('/backup', [CustomersController::class, 'backup'])->name('customer.backup');
+    Route::get('/fetch-backup', [CustomersController::class, 'fetchBackup'])->name('customer.fetchbackup');
+    Route::get('/file-download/{fileId}', [CustomersController::class, 'fileDownload']);
+    Route::get('/change-password', [CustomersController::class, 'changePassword'])->name('customer.changepassword');
+    Route::put('/update-password', [CustomersController::class, 'updatePassword'])->name('customer.updatepassword');
 });
 
 Route::get('/', [PagesController::class, 'index'])->name('index');
