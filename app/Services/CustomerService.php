@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Exceptions\UnauthorizedException;
 
 class CustomerService
@@ -265,6 +266,21 @@ class CustomerService
          }
       }
       return $data;
+   }
+
+   public function updatePassword($data, $acctno, $user) {
+      if(!isset($data['password'])) {
+         throw new Exception("Please provide a valid password");
+      }
+
+      $customer = CustomerData::find($acctno);
+      if(!$customer) {
+         throw new Exception("Customer not found");
+      }
+
+      // Update password
+      $customer->password = Hash::make($data['password']);
+      $customer->save();
    }
 }
 

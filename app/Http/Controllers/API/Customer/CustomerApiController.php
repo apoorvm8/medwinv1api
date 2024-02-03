@@ -92,4 +92,11 @@ class CustomerApiController extends Controller
             ]
         ]);
     }
+
+    public function updatePassword(Request $request, $acctno) {
+        app(CustomerService::class)->updatePassword($request->all(), $acctno, auth('sanctum')->user());
+        return response([
+            'success' => true, 'msg' => 'Customer password updated successfully.', 'data' => []
+        ]);
+    }
 }
