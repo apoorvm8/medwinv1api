@@ -10,6 +10,7 @@ use App\Traits\HashIds;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class CustomerBackupService
 {
@@ -89,7 +90,9 @@ class CustomerBackupService
                   $arr["name"] = $file->name;
                   $arr["created_at"] = Carbon::parse($file->created_at)->format('d/m/Y, g:i A');
                   $arr["lastUploadedAt"] = isset($file->lastUploadedAt) ? Carbon::parse($file->lastUploadedAt)->format('d/m/Y, g:i A') : null;
-                  $arr["fileSize"] = $file->file_size;
+                  // Get the path size from s3
+                  $fileSizeBytes = Storage::disk('s3')->size($file->path);
+                  $arr["fileSize"] = humanFileSize($fileSizeBytes);
                   $arr["path"] = $file->path;
                   $fileArr[] = $arr;
               }
@@ -108,7 +111,8 @@ class CustomerBackupService
                   $arr["name"] = $file->name;
                   $arr["created_at"] = Carbon::parse($file->created_at)->format('d/m/Y, g:i A');
                   $arr["lastUploadedAt"] = isset($file->lastUploadedAt) ? Carbon::parse($file->lastUploadedAt)->format('d/m/Y, g:i A') : null;
-                  $arr["fileSize"] = $file->file_size;
+                  $fileSizeBytes = Storage::disk('s3')->size($file->path);
+                  $arr["fileSize"] = humanFileSize($fileSizeBytes);
                   $arr["path"] = $file->path;
                   $fileArr[] = $arr;
               }

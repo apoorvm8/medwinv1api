@@ -67,6 +67,7 @@ Route::group(['prefix' => 'customers', 'middleware' => ['auth:sanctum']], functi
     Route::get('/customer-whatsapps', [CustomerApiController::class, 'getCustomerWhatsapps'])->middleware('permission:customer_whatsapp_view');
     Route::get('/customer-dashboard-details', [CustomerApiController::class, 'getCustomerDashboardDetails']);
     Route::get('/customer-amc-due', [CustomerApiController::class, 'getCustomerAmcDue'])->middleware('permission:customer_amcdue_view');
+    Route::put('/update-password/{acctno}', [CustomerApiController::class, 'updatePassword'])->middleware('permission:customer_backup_toggle');
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

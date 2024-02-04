@@ -17,14 +17,14 @@ class CustomerBackupAccessResource extends JsonResource
      */
     public function toArray($request)
     {
-        $einvoices = $this->resource->toArray();
-        foreach($einvoices["data"] as $key => $einvoice) {
-            $einvoice["id"] = $this->encode($einvoice);
-            $einvoice["install_date"] = $einvoice["install_date"] ? Carbon::parse($einvoice["install_date"])->format('d/m/Y') : null;
-            $einvoice["next_amc_date"] = $einvoice["next_amc_date"] ? Carbon::parse($einvoice["next_amc_date"])->format('d/m/Y') : null; 
-            $einvoice["created_at"] = $einvoice["created_at"] ? Carbon::parse($einvoice["created_at"])->format('d/m/Y, g:i A') : null; 
-            $einvoices["data"][$key] = $einvoice;
+        $customerBackups = $this->resource->toArray();
+        foreach($customerBackups["data"] as $key => $customerBackup) {
+            $customerBackup["id"] = $this->encode($customerBackup);
+            $customerBackup["install_date"] = $customerBackup["install_date"] ? Carbon::parse($customerBackup["install_date"])->format('d/m/Y') : null;
+            $customerBackup["next_amc_date"] = $customerBackup["next_amc_date"] ? Carbon::parse($customerBackup["next_amc_date"])->format('d/m/Y') : null; 
+            $customerBackup["created_at"] = $customerBackup["created_at"] ? Carbon::parse($customerBackup["created_at"])->format('d/m/Y, g:i A') : null; 
+            $customerBackups["data"][$key] = $customerBackup;
         }
-        return $einvoices;
+        return $customerBackups;
     }
 }

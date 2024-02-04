@@ -27,8 +27,10 @@ class CustomerBackup extends Model
         'customer_data.subdesc', 'customer_data.gstno'
     ];
 
+    protected $appends = ['hasSetPassword'];
+
     public function customer() : BelongsTo {
-        return $this->belongsTo(CustomerData::class, 'acctno', 'id');
+        return $this->belongsTo(CustomerData::class, 'acctno', 'acctno');
     }
 
     /**
@@ -40,6 +42,19 @@ class CustomerBackup extends Model
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
+    }
+
+    public function getHasSetPasswordAttribute() {
+        $customerData = CustomerData::find($this->acctno);
+        if($customerData) {
+            if($customerData->password) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 }
 
