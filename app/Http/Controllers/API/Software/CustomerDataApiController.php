@@ -53,7 +53,6 @@ class CustomerDataApiController extends Controller
             $fileArr = app(CustomerBackupService::class)->getBackupByType($backupType, $customerFolder);
             foreach($fileArr as $key => $el) {
                 $el["id"] = Crypt::decrypt($el["id"]);
-                $el["fileSize"] = $el["fileSize"] . " MB";
                 $fileArr[$key] = $el;
             }
             if(count($fileArr) == 0) {
