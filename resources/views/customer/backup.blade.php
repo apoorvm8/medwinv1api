@@ -20,11 +20,11 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 id="orderListTitle" class="m-0"><span class="pb-md-1" style='font-size:1.3rem; border-bottom:2px solid black;'>Your Order(s)</span></h1>
+                    <h1 id="orderListTitle" class="m-0"><span class="pb-md-1" style='font-size:1.3rem; border-bottom:2px solid black;'>Your Backup(s)</span></h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="/retailer">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{route('customer.dashboard')}}">Home</a></li>
                     <li class="breadcrumb-item active">Backup</li>
                     </ol>
                 </div>
@@ -35,15 +35,12 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row mb-4">
-                <div class="col-sm-12 col-md-4">
-                    <div class="row">
-                        <div class="col-sm-12 col-md-4 col-lg-3 mt-1">
-                            <span class="font-weight-bold">Filter By:</span>
+                <div class="col-sm-12 col-md-5">
+                    <div class="d-flex flex-row">
+                        <div class='mb-2 mr-2'> 
+                            <span class='font-weight-bold'>Backup Type:</span>
                         </div>
-                        <div class="col-sm-12 col-md-3 mt-1 ml-lg-n5">
-                            <span>Backup Type:</span>
-                        </div>
-                        <div class="col-sm-12 col-md-6">
+                        <div class='w-25' style="margin-top:-.4rem;">
                             <select id='backup-type' class="form-control">
                                 <option value='currentyear'>Current</option>
                                 <option value='lastyear'>Previous</option>
@@ -51,9 +48,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> 
             <div class="row">
-                <div class="col-md-7 col-lg-7 col-sm-12">
+                <div class="col-md-10 col-lg-10 col-sm-12">
                     <div class="table-responsive mb-5">
                         <table id="backupOrderTable" class="table table-sm table-bordered">
                             <thead>
