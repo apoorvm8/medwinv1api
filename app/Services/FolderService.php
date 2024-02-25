@@ -535,12 +535,18 @@ class FolderService
 
             // Prepare array for mass insertion
             if(count($files) > 0) {
-               FolderMaster::insert($files);
+               foreach($files as $file) {
+                  $result = FolderMaster::create($file);
+                  $this->createFilePermissionIfOwner($userId, $result->id, $folder->id);
+               }
             }
 
-            // if(count($toUpdateFiles) > 0) {
-            //    $this->updateFileSize($toUpdateFiles, $userId);
-            // }
+
+            if(count($toUpdateFiles) > 0) {
+               // Update last updated at
+               $this->updateLastTimeAndPermission($toUpdateFiles, $userId);
+               // $this->updateFileSize($toUpdateFiles, $userId);
+            }
             // Add total size in upwards direction
             // $this->resetFolderSizeUp($folder);
 
@@ -551,6 +557,36 @@ class FolderService
       } catch(Exception $ex) {
          throw new Exception($ex->getMessage() ?: "Error in upload files", intval($ex->getCode()) ?: Response::HTTP_INTERNAL_SERVER_ERROR);
       }
+   }
+
+   public function createFilePermissionIfOwner($userId, $fileId, $parentId) {
+      // Logic related to permission
+      if($userId) {
+         $user = User::find($userId);
+         $isSuperUser = $user->hasRole(User::SUPER_USER);
+
+         // Don't want to set all this if superadmin is using this
+         if(!$isSuperUser) {
+            $folderPermission = FolderPermission::where('folder_id', $parentId)->where('user_id', $userId)->first();
+            if($folderPermission) {
+               // If user has permission then assign same permission to upload file.
+               $permissionRow = [
+                  'view' => 1,
+                  'create' => 0,
+                  'edit' => 0,
+                  'info' => 1,
+                  'download' => 1,
+                  'upload' => 0,
+                  'user_id' => $this->encode(['id' => $userId]),
+                  'folder_id' => null,
+                  'delete' => 0,
+                  'permission' => false,
+                  'applychild' => false
+               ];
+               $this->updateUserFolderPermissions([$permissionRow], $this->encode(['id' => $fileId]), true, null);
+            }
+         }
+      } 
    }
 
    /**
@@ -781,6 +817,15 @@ class FolderService
          $folder->save();
          $parentFolder = FolderMaster::find($folder->parent_id);
          $this->resetChildCountUp($parentFolder);
+      }
+   }
+
+   public function updateLastTimeAndPermission($toUpdateFiles, $userId = null) {
+      foreach($toUpdateFiles as $file) {
+         $file->updated_at = now();
+         $file->updated_by = $userId;
+         $file->save();
+         $this->createFilePermissionIfOwner($userId, $file->id, $file->parent_id);
       }
    }
 
