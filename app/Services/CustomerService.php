@@ -149,6 +149,11 @@ class CustomerService
                app(CustomerWhatsappService::class)->deleteCustomerWhatsappService($sourceId);
                return "Customer whatsapp deleted successfully.";
             }
+
+            if($actionType == "createotherfolder") {
+               app(CustomerBackupService::class)->createOtherFolderForCustomer($sourceId, $user);
+               return "Other folder created successfully for customer $acctno";
+            }
          } else {
             throw new UnauthorizedException(Response::HTTP_UNAUTHORIZED, 'Action Not authorized');
          }

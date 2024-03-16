@@ -6,8 +6,10 @@ use App\Models\CustomerBackup;
 use App\Models\CustomerStockAccess;
 use App\Models\Einvoice;
 use App\Models\FolderMaster;
+use App\Models\User;
 use App\Traits\HashIds;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -119,6 +121,42 @@ class CustomerBackupService
           }        
       }
       return $fileArr;
+  }
+
+  /**
+   * @desc Function to create other folder inside a customer backup's folder structure
+   * @access-control private
+   * @params $sourceId, $user
+   */
+  public function createOtherFolderForCustomer($sourceId, $adminUser) {
+      $sourceId = $this->decode($sourceId, 'Customer Backup');
+      $customerBackup = CustomerBackup::find($sourceId);
+      $user = User::where('email', config('app.mainuseremail'))->first();
+      if($customerBackup) {
+         $permissionRows = null;
+         if($user) {
+            $permissionRows = [
+               [
+                  'view' => 1,
+                  'create' => 0,
+                  'edit' => 0,
+                  'info' => 1,
+                  'download' => 1,
+                  'upload' => 0,
+                  'user_id' => $this->encode(['id' => $user->id]),
+                  'folder_id' => null,
+                  'delete' => 0,
+                  'permission' => false,
+                  'applychild' => false
+               ]
+            ];
+         }
+
+         app(FolderService::class)->createFolder(['parent_id' => $this->encode(['id' => $customerBackup->folder_id]), 'name' => 'other', 
+         'resource_module' => 'backup', 'permissionRows' => $permissionRows], $adminUser ? $adminUser->id : null);
+      } else {
+         throw new Exception("Customer Backup not found.");
+      }
   }
 }
 

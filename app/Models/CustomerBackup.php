@@ -27,7 +27,7 @@ class CustomerBackup extends Model
         'customer_data.subdesc', 'customer_data.gstno'
     ];
 
-    protected $appends = ['hasSetPassword'];
+    protected $appends = ['hasSetPassword', 'hasOtherFolder'];
 
     public function customer() : BelongsTo {
         return $this->belongsTo(CustomerData::class, 'acctno', 'acctno');
@@ -56,5 +56,19 @@ class CustomerBackup extends Model
             return false;
         }
     }
+
+    public function getHasOtherFolderAttribute() {
+        if($this->folder_id) {
+            $childFolderCnt = FolderMaster::where('parent_id', $this->folder_id)->count();
+            if($childFolderCnt == 3) 
+                return true;
+            else 
+                return false;
+        } else {
+            return false;
+        }
+       
+    }
+
 }
 
