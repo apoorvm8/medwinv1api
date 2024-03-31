@@ -44,6 +44,7 @@
                             <select id='backup-type' class="form-control">
                                 <option value='currentyear'>Current</option>
                                 <option value='lastyear'>Previous</option>
+                                <option value='other'>Other</option>
                             </select>
                         </div>
                     </div>

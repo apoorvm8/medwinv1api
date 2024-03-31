@@ -129,6 +129,7 @@ class FolderService
             Arr::set($data, 'created_by', $userId);
             Arr::set($data, 'path', $parentPath . '/' . Arr::get($data, 'name'));
             Arr::set($data, 'parent_id', $parentFolder->id);
+            Arr::set($data, 'resource_module', Arr::get($data, 'resource_module') ? Arr::get($data, 'resource_module') : 'software');
             $createdFolder = FolderMaster::create($data);
             // $this->resetChildCountUp($parentFolder);
             if($permissionRows) {
@@ -141,9 +142,9 @@ class FolderService
                   // Create entry in backup table
                   // Recursive Create the child folders -> currentyear and lastyear
                   $this->createFolder(['parent_id' => $this->encode(['id' => $createdFolder->id]), 'name' => 'currentyear', 
-                  'permissionRows' => $permissionRows], $userId);
+                  'resource_module' => 'backup', 'permissionRows' => $permissionRows], $userId);
                   $this->createFolder(['parent_id' => $this->encode(['id' => $createdFolder->id]), 'name' => 'lastyear',
-                  'permissionRows' => $permissionRows], $userId);
+                  'resource_module' => 'backup', 'permissionRows' => $permissionRows], $userId);
                   // $this->resetChildCountUp($parentFolder);
 
                   CustomerBackup::create([

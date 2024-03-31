@@ -62,7 +62,7 @@ class ConvertOldFolderMasters extends Command
                     $parentFolder = FolderMaster::where('path', $parentPath)->first();
                     if($parentFolder) {
                         $parentId = $parentFolder->id;
-                        if($parentFolder->name == 'customersbackup' || $parentFolder->name == 'currentyear' || $parentFolder->name == 'lastyear') {
+                        if($parentFolder->name == 'customersbackup' || $parentFolder->name == 'currentyear' || $parentFolder->name == 'lastyear' || $parentFolder->name == 'other') {
                             $resourceModule = 'backup';
                         }
 
