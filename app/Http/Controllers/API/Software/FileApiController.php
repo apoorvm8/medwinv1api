@@ -29,6 +29,7 @@ class FileApiController extends Controller
     public function backupFileBySoft(Request $request) {
         try {      
             $errors = [];
+            $maxFilesAllowed = 3;
             $validator = Validator::make($request->all(), [
                 'uploadFile' => 'required|file|max:80000',
                 'password' => 'required',
@@ -103,15 +104,21 @@ class FileApiController extends Controller
                 $backupType = $request->backupType;
 
                 // Check The Backup Type Get the appropriate folder in which file will be uploaded.
-                if($backupType == 'currentyear')
+                if($backupType == 'currentyear') {
                     $folder = FolderMaster::where('parent_id', $customerFolder->id)->where('name', 'currentyear')->where('depth', 3)->where('resource_type', FolderMaster::RESOURCE_TYPE_FOLDER)->first(); 
-                else if($backupType == 'lastyear')
+                    $maxFilesAllowed = 3;
+                } else if($backupType == 'lastyear') {
                     $folder = FolderMaster::where('parent_id', $customerFolder->id)->where('name', 'lastyear')->where('depth', 3)->where('resource_type', FolderMaster::RESOURCE_TYPE_FOLDER)->first(); 
-                else
+                    $maxFilesAllowed = 3;
+                } else if($backupType == 'other') {
+                    $folder = FolderMaster::where('parent_id', $customerFolder->id)->where('name', 'other')->where('depth', 3)->where('resource_type', FolderMaster::RESOURCE_TYPE_FOLDER)->first(); 
+                    $maxFilesAllowed = 5;
+                } else {
                     return response(['success' => false, 'msg' => 'Invalid backup type provided', 'errors' => []], Response::HTTP_BAD_REQUEST);
+                }
                 
                 if(!$folder)
-                    return response(['success' => false, 'msg' => 'Folder Not Found'], Response::HTTP_NOT_FOUND); 
+                    return response(['success' => false, 'msg' => "Backup folder for $backupType year not found"], Response::HTTP_NOT_FOUND); 
 
                 // Check the count of children
                 $fileLst = FolderMaster::where('parent_id', $folder->id)->where('depth', 4)->where('resource_type', FolderMaster::RESOURCE_TYPE_FILE)->orderby('created_at', 'asc')->get();
@@ -121,7 +128,7 @@ class FileApiController extends Controller
                 $fileToUploadExists = Storage::disk('s3')->exists($parentPath . '/' . $fileNameWithExt);
 
                 // If the file being uploaded is not present in backup folder (current or last) and count is 3 then we remove the oldest backup
-                if(!$fileToUploadExists && count($fileLst) == 3) {
+                if(!$fileToUploadExists && count($fileLst) == $maxFilesAllowed) {
                     // Delete the oldest file 
                     $oldestFile = $fileLst[0];
                     $deleted = Storage::disk('s3')->delete($oldestFile->path);

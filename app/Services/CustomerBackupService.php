@@ -119,6 +119,26 @@ class CustomerBackupService
                   $fileArr[] = $arr;
               }
           }        
+      } else if($type == "other") {
+         $folder = FolderMaster::where('parent_id', $customerFolder->id)->where('name', 'other')->where('depth', 3)->where('resource_type', FolderMaster::RESOURCE_TYPE_FOLDER)->first(); 
+         $fileArr = [];
+         if(!$folder) {
+             $fileArr = [];
+         } else {
+             $fileLst = FolderMaster::where('parent_id', $folder->id)->where('depth', 4)->where('resource_type', FolderMaster::RESOURCE_TYPE_FILE)->orderby('created_at', 'asc')->get();
+             $fileArr = [];
+             foreach($fileLst as $key => $file) {
+                 $arr = [];
+                 $arr["id"] = Crypt::encrypt($file->id);
+                 $arr["name"] = $file->name;
+                 $arr["created_at"] = Carbon::parse($file->created_at)->format('d/m/Y, g:i A');
+                 $arr["lastUploadedAt"] = isset($file->lastUploadedAt) ? Carbon::parse($file->lastUploadedAt)->format('d/m/Y, g:i A') : null;
+                 $fileSizeBytes = Storage::disk('s3')->size($file->path);
+                 $arr["fileSize"] = humanFileSize($fileSizeBytes);
+                 $arr["path"] = $file->path;
+                 $fileArr[] = $arr;
+             }
+         }     
       }
       return $fileArr;
   }
