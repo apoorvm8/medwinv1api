@@ -90,7 +90,7 @@ class CustomerBackupService
                   $arr = [];
                   $arr["id"] = Crypt::encrypt($file->id);
                   $arr["name"] = $file->name;
-                  $arr["created_at"] = Carbon::parse($file->created_at)->format('d/m/Y, g:i A');
+                  $arr["created_at"] = isset($file->lastUploadedAt) ? Carbon::parse($file->lastUploadedAt)->format('d/m/Y, g:i A') : Carbon::parse($file->created_at)->format('d/m/Y, g:i A');
                   $arr["lastUploadedAt"] = isset($file->lastUploadedAt) ? Carbon::parse($file->lastUploadedAt)->format('d/m/Y, g:i A') : null;
                   // Get the path size from s3
                   $fileSizeBytes = Storage::disk('s3')->size($file->path);
@@ -111,7 +111,7 @@ class CustomerBackupService
                   $arr = [];
                   $arr["id"] = Crypt::encrypt($file->id);
                   $arr["name"] = $file->name;
-                  $arr["created_at"] = Carbon::parse($file->created_at)->format('d/m/Y, g:i A');
+                  $arr["created_at"] = isset($file->lastUploadedAt) ? Carbon::parse($file->lastUploadedAt)->format('d/m/Y, g:i A') : Carbon::parse($file->created_at)->format('d/m/Y, g:i A');
                   $arr["lastUploadedAt"] = isset($file->lastUploadedAt) ? Carbon::parse($file->lastUploadedAt)->format('d/m/Y, g:i A') : null;
                   $fileSizeBytes = Storage::disk('s3')->size($file->path);
                   $arr["fileSize"] = humanFileSize($fileSizeBytes);
@@ -131,7 +131,7 @@ class CustomerBackupService
                  $arr = [];
                  $arr["id"] = Crypt::encrypt($file->id);
                  $arr["name"] = $file->name;
-                 $arr["created_at"] = Carbon::parse($file->created_at)->format('d/m/Y, g:i A');
+                 $arr["created_at"] = isset($file->lastUploadedAt) ? Carbon::parse($file->lastUploadedAt)->format('d/m/Y, g:i A') : Carbon::parse($file->created_at)->format('d/m/Y, g:i A');
                  $arr["lastUploadedAt"] = isset($file->lastUploadedAt) ? Carbon::parse($file->lastUploadedAt)->format('d/m/Y, g:i A') : null;
                  $fileSizeBytes = Storage::disk('s3')->size($file->path);
                  $arr["fileSize"] = humanFileSize($fileSizeBytes);
