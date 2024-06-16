@@ -11,6 +11,10 @@ use App\Models\CustomerWhatsapp;
 use App\Models\Einvoice;
 use App\Models\FolderMaster;
 use App\Services\CustomerBackupService;
+use App\Services\CustomerStockAccessService;
+use App\Services\CustomerWhatsappService;
+use App\Services\EinvoiceService;
+use App\Traits\HashIds;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Crypt;
@@ -18,6 +22,7 @@ use Illuminate\Support\Facades\Validator;
 
 class CustomerDataApiController extends Controller
 {
+    use HashIds;
     public function __construct()
     {
         $this->middleware('checkCustomerReq');
@@ -345,5 +350,68 @@ class CustomerDataApiController extends Controller
          } else {
              return response()->json(['success' => false, 'msg' => 'Please provide valid acctno'], 400);
          }
+    }
+
+    /**
+     * @desc Function to completely remove a customer from website
+     * @method delete
+     * @param Request $request,
+     * @param string $id
+     */
+    public function deleteCustomer(Request $request) {
+        // Check if customer exists
+        $acctno = $request->acctno;
+        if(!$acctno) {
+            return response()->json(['success' => false, 'msg' => 'Please provide valid acctno'], Response::HTTP_BAD_REQUEST);
+        }
+        $customerData = CustomerData::find($request->acctno);
+
+        if(!$customerData) {
+            return response()->json(['success' => false, 'msg' => "Customer with id $acctno not found"], Response::HTTP_NOT_FOUND);
+        }
+        
+        $servicesRemoved = [];
+        // Check if customer has services present 
+        // E-invoice
+        $eInvoice = Einvoice::where('acctno', $acctno)->first();
+        if($eInvoice) {
+            // Remove e-invoice
+            app(EinvoiceService::class)->deleteEinvoice($this->encode(['id' => $eInvoice->id]));
+            array_push($servicesRemoved, 'E-Invoice');
+        }
+
+        // Whatsapp 
+        $customerWhatsapp = CustomerWhatsapp::where('acctno', $acctno)->first();
+
+        if($customerWhatsapp) {
+            // Remove whatsapp service
+            app(CustomerWhatsappService::class)->deleteCustomerWhatsappService($this->encode(['id' => $customerWhatsapp->id]));
+            array_push($servicesRemoved, 'Whatsapp');
+        }
+
+        // Customer stock access
+        $stockView = CustomerStockAccess::where('acctno', $acctno)->first();
+        if($stockView) {
+            // Remove stock view
+            app(CustomerStockAccessService::class)->deleteStockAccess($this->encode(['id' => $stockView->id]));
+            array_push($servicesRemoved, 'Stock Access');
+        }
+
+        // Customer backup access
+        $cloudBackup = CustomerBackup::where('acctno', $acctno)->first();
+        if($cloudBackup) {
+            // Remove cloud backup
+            app(CustomerBackupService::class)->deleteBackupAccess($this->encode(['id' => $cloudBackup->id]));
+            array_push($servicesRemoved, 'Backup');
+        }
+
+        // Delete the customer
+        $customerData->delete();
+
+        $servicesRemovedStr = 'No services were present for this customer.';
+        if(count($servicesRemoved) > 0) {
+            $servicesRemovedStr = implode(',', $servicesRemoved);
+        }
+        return response(['success' => true, 'msg' => "Customer $acctno removed successfully, services removed: $servicesRemovedStr"], Response::HTTP_OK);
     }
 }
