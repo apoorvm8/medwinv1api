@@ -31,6 +31,7 @@ Route::prefix('medwincustomer')->group(function() {
     Route::get('einvoice-status', [CustomerDataApiController::class, 'getEinvoiceStatus']);
     Route::post('einvoice-update', [CustomerDataApiController::class, 'updateEinvoice']);
     Route::post('service-update', [CustomerDataApiController::class, 'serviceUpdate']);
+    Route::post('delete-customer', [CustomerDataApiController::class, 'deleteCustomer']);
 });
 // END
 
