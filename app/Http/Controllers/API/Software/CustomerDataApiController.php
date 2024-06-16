@@ -408,7 +408,10 @@ class CustomerDataApiController extends Controller
         // Delete the customer
         $customerData->delete();
 
-        $servicesRemovedStr = implode(',', $servicesRemoved);
+        $servicesRemovedStr = 'No services were present for this customer.';
+        if(count($servicesRemoved) > 0) {
+            $servicesRemovedStr = implode(',', $servicesRemoved);
+        }
         return response(['success' => true, 'msg' => "Customer $acctno removed successfully, services removed: $servicesRemovedStr"], Response::HTTP_OK);
     }
 }
