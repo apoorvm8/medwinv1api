@@ -24,11 +24,11 @@ Route::post('/upload-customer-stock', [FileApiController::class, 'uploadStockByS
 Route::get('/download-customer-stock',[FileApiController::class, 'downloadStockBySoft']);
 
 Route::prefix('medwincustomer')->group(function() {
-    Route::get('getbackup', [CustomerDataApiController::class, 'getBackup']);
+    Route::post('getbackup', [CustomerDataApiController::class, 'getBackup']);
     Route::post('submit', [CustomerDataApiController::class, 'submit']);    
-    Route::get('getdate', [CustomerDataApiController::class, 'getDate']);
+    Route::post('getdate', [CustomerDataApiController::class, 'getDate']);
     Route::post('register', [CustomerDataApiController::class, 'register']);
-    Route::get('einvoice-status', [CustomerDataApiController::class, 'getEinvoiceStatus']);
+    Route::post('einvoice-status', [CustomerDataApiController::class, 'getEinvoiceStatus']);
     Route::post('einvoice-update', [CustomerDataApiController::class, 'updateEinvoice']);
     Route::post('service-update', [CustomerDataApiController::class, 'serviceUpdate']);
     Route::post('delete-customer', [CustomerDataApiController::class, 'deleteCustomer']);
