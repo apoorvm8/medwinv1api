@@ -22,7 +22,7 @@ class CustomerStockAccess extends Model
     // address is combination of subadd1, subadd2, subadd3
     public const SEARCHABLE = [
         'customer_stock_access.acctno', 'customer_stock_access.install_date', 'customer_stock_access.next_amc_date', 
-        'customer_stock_access.remarks', 'customer_backups.created_at', 'customer_data.subdesc', 
+        'customer_stock_access.remarks', 'customer_stock_access.created_at', 'customer_data.subdesc', 
         'customer_data.gstno'
     ];
 
