@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\CustomerBackup;
 use App\Models\CustomerData;
+use App\Models\CustomerMsg;
 use App\Models\CustomerRegister;
 use App\Models\CustomerStockAccess;
 use App\Models\CustomerWhatsapp;
@@ -250,6 +251,7 @@ class CustomerService
          $data['einvoice'] = Einvoice::count();
          $data['register'] = CustomerRegister::count();
          $data['whatsapp'] = CustomerWhatsapp::count();
+         $data['messages'] = CustomerMsg::where('seen', 0)->count();
       } else {
          if(in_array('customer_master_view', $userPermissions)) 
             $data['customer'] = CustomerData::count();
@@ -268,6 +270,10 @@ class CustomerService
 
          if(in_array('customer_whatsapp_view', $userPermissions)) {
             $data['whatsapp'] = CustomerWhatsapp::count();
+         }
+
+         if(in_array('messages_view', $userPermissions)) {
+            $data['messages'] = CustomerMsg::where('seen', 0)->count();
          }
       }
       return $data;

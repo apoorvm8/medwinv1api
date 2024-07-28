@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\Auth\AuthApiController;
 use App\Http\Controllers\API\Customer\CustomerApiController;
+use App\Http\Controllers\API\Messages\CustomerMsgController;
 use App\Http\Controllers\API\Customer\EinvoiceApiController;
 use App\Http\Controllers\API\Folder\FolderApiController;
 use App\Http\Controllers\API\Software\CustomerDataApiController;
@@ -69,6 +70,8 @@ Route::group(['prefix' => 'customers', 'middleware' => ['auth:sanctum']], functi
     Route::get('/customer-dashboard-details', [CustomerApiController::class, 'getCustomerDashboardDetails']);
     Route::get('/customer-amc-due', [CustomerApiController::class, 'getCustomerAmcDue'])->middleware('permission:customer_amcdue_view');
     Route::put('/update-password/{acctno}', [CustomerApiController::class, 'updatePassword'])->middleware('permission:customer_backup_toggle');
+    Route::get('/messages', [CustomerMsgController::class, 'get'])->middleware('permission:messages_view');
+    Route::put('/messages', [CustomerMsgController::class, 'update'])->middleware('permission:messages_update');
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

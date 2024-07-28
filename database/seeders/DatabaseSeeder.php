@@ -12,6 +12,7 @@ use Database\Seeders\Customer\CustomerRegisterPermissionSeeder;
 use Database\Seeders\Customer\CustomerStockAccessPermissionSeeder;
 use Database\Seeders\Customer\CustomerWhatsappPermissionSeeder;
 use Database\Seeders\Customer\FolderPermissionSeeder;
+use Database\Seeders\Customer\MessagesPermissionSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -38,6 +39,7 @@ class DatabaseSeeder extends Seeder
             FolderPermissionSeeder::class,
             CustomerWhatsappPermissionSeeder::class,
             CustomerAmcDuePermissionSeeder::class,
+            MessagesPermissionSeeder::class
         ]);
     }
 }

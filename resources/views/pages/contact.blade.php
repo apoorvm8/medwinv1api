@@ -58,7 +58,7 @@
                         <label for="name" class="label">Name</label>
                     </div>
                     <div class="form-group py-4">
-                        <input required value="{{old('mobile_no')}}" name="mobile_no" id="mobile_no" type="number"
+                        <input required value="{{old('mobile_no')}}" name="mobile_no" id="mobile_no" pattern="\d*" maxlength="10"
                             class="form-control my-2 p-2 input" placeholder="Mobile Number*" />
                         <label for="Mobile No" class="label">Mobile No</label>
                     </div>

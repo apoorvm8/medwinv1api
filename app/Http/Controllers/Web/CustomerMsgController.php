@@ -59,7 +59,9 @@ class CustomerMsgController extends Controller
         $customerMsg->email = $request->input("email");
         $customerMsg->type_of_soft = $type_of_soft; // $request->input('type_of_soft');
         $customerMsg->seen = 0;
-        $customerMsg->seen_by = "none";
+        $customerMsg->seen_by = null;
+        $customerMsg->created_at = now();
+        $customerMsg->updated_at = now();
         $customerMsg->save();
 
         return redirect('/contact')->with('success', 'Your message has been sent successfully, we will get back to you');
