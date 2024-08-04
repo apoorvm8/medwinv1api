@@ -302,72 +302,33 @@ body {
   height: 100vh;
 }
 
-#showcase {
-  /* margin-top: 8rem; */
-  /* overflow: hidden; */
-  padding: 1rem 0;
+.showcase-container {
+  height: 100vh;
+  background-image: linear-gradient(55deg, #f9fbfd 50%, #f0f4f8 50%);
 }
 
 /* #showcase .showcase-text h1 {
 } */
 
-#showcase .showcase-text {
+#showcase .showcase-content {
   animation: showcaseTextAnimate 1.5s forwards;
   transition: all 1s ease;
-  /* margin-top: 0rem; */
-  margin-top: 9rem;
 }
 
 @keyframes showcaseTextAnimate {
   from {
-    transform: translateY(5rem);
+    transform: translateY(2rem);
     opacity: 0;
   }
 
   to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-#showcase .showcase-img {
-  animation: showcaseImgAnimate 2s forwards;
-  transition: all 1s ease;
-  margin-top: 7rem;
-}
-
-@keyframes showcaseImgAnimate {
-  from {
-    transform: translateY(5rem);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateY(0);
+    transform: translateY(4rem);
     opacity: 1;
   }
 }
 
 #showcase #showcaseHighlights {
-  opacity: 0;
-  transform: translateY(80px);
-  transition: transform 1s ease;
-}
-
-#showcase .customShowcase {
-  animation: animateShowcaseHighlights 1.5s forwards;
-  transition: transform 1s ease;
-}
-
-@keyframes animateShowcaseHighlights {
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-#showcase #showcaseHighlights {
-  margin-top: 9rem;
+  margin-top: 5rem;  
 }
 
 #showcase #showcaseHighlights .fa {
@@ -381,9 +342,9 @@ body {
 
 /***************************************** About ********************************************/
 #about {
-  margin-top: 14rem;
   background: #f9fbfd;
   border-top: 1px solid #f9fbfd;
+  margin-top: -2rem;
 }
 
 .cardLeft,
@@ -440,57 +401,12 @@ body {
   /* color: #fff; */
 }
 
-.featureLeft,
-.featureRight {
-  opacity: 0;
-  transition: transform 1.5s ease;
-}
-
-.animateFeatureLeft {
-  animation: customLeftFeatureAnimation 1.5s forwards;
-  transition: transform 1.5s ease;
-}
-
-.animateFeatureRight {
-  animation: customRightFeatureAnimation 1.5s forwards 0.5s;
-  transition: transform 1.5s ease;
-}
-
-@keyframes customLeftFeatureAnimation {
-  from {
-    transform: translateX(-200px);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes customRightFeatureAnimation {
-  from {
-    transform: translateX(200px);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
 /**************************************** Contact ************************************/
 #contact {
   background: #f9fbfd;
   border-top: 1px solid #f9fbfd;
 }
 
-.contact-form,
-.contact-image {
-  opacity: 0;
-  transition: transform 1s ease;
-}
 
 .input {
   background: transparent;
@@ -554,15 +470,6 @@ body {
   transform: skewX(-8deg) translate(5.5rem, 6rem);
 }
 
-.animateContactLeft {
-  animation: customLeftAnimation 1.5s forwards;
-  transition: transform 1s ease;
-}
-
-.animateContactRight {
-  animation: customRightAnimation 1.5s forwards 1s;
-  transition: transform 1s ease;
-}
 
 /* ******************************Footer*************************************** */
 #footer {
@@ -609,7 +516,7 @@ body {
 }
 
 /* Nav */
-@media (max-width: 991px) {
+@media (max-width: 900px) {
   .container {
     padding: 0 0 0 0;
   }
@@ -621,63 +528,7 @@ body {
   }
 }
 
-/* Header */
-/* Iphone X Landscape */
-@media (min-width: 810px) and (max-height: 376px) {
-  #about {
-    margin-top: 40rem !important;
-  }
-
-  #about .card {
-    width: 80% !important;
-    margin: auto !important;
-  }
-
-  #about .card-img-top {
-    height: 30vh !important;
-  }
-}
-
-/* Iphone 5 potrait */
-@media (min-width: 300px) and (max-width: 359px) {
-  #showcase .showcase-text {
-    margin-top: 0 !important;
-  }
-
-  #about {
-    margin-top: 60rem !important;
-  }
-}
-
-/* Iphone 5 Landscape */
-@media (min-height: 320px) and (max-height: 320px) {
-  #about {
-    margin-top: 65rem !important;
-  }
-
-  #about .card {
-    width: 50%;
-    margin: 1rem auto !important;
-  }
-
-  .card-img-top {
-    height: 30vh !important;
-  }
-}
-
-/* Galaxy and Iphone 6 potrait */
-@media (max-width: 600px) {
-  #showcase .showcase-img {
-    padding: 0 2rem;
-    margin: 0;
-    margin-top: 1rem;
-    margin-left: 1rem;
-  }
-
-  #showcase .showcase-img img {
-    width: 100%;
-  }
-
+@media (min-width: 300px) and (max-width: 600px) {
   #showcase .showcase-text {
     padding: 0;
     margin: 0;
@@ -699,23 +550,11 @@ body {
   #showcase #showcaseHighlights {
     margin: 0;
     padding: 1rem 2rem;
-    margin-top: 4rem;
   }
 
   #showcase #showcaseHighlights div {
     /* padding: 1rem 0; */
     margin: 1rem 0;
-  }
-
-  /* About */
-
-  #about {
-    margin: 0;
-    padding: 0;
-    padding: 2rem;
-    width: 100%;
-    margin-top: 60rem;
-    /* width: 100vw; */
   }
 
   #about h1 {
@@ -747,97 +586,99 @@ body {
   }
 }
 
-/* Iphone plus series potrait */
-@media (min-width: 410px) and (max-width: 637px) {
+/* IPHONE SE */
+/* portait */
+@media (min-width: 300px) and (max-width: 376px) and (orientation: portrait) {
   #about {
-    margin: 0;
-    padding: 0;
-    padding: 2rem;
-    width: 100%;
-    margin-top: 49rem;
+    margin-top: 36rem;
   }
 }
 
-/* Landscape of Galaxy and Iphone 6  */
-@media (min-width: 638px) and (max-width: 767px) {
-  #showcase .showcase-img {
-    padding: 0 2rem;
-    margin: 0;
-    margin-top: 1rem;
-    margin-left: 1rem;
-  }
-
-  #showcase .showcase-img img {
-    width: 100%;
-  }
-
-  #showcase .showcase-text {
-    padding: 0;
-    margin: 0;
-    padding: 2rem;
-    margin-left: 1rem;
-    margin-top: 2rem;
-    text-align: center;
-  }
-
-  #showcase .showcase-text h1 {
-    font-size: 2rem;
-  }
-
-  #showcase .showcase-text p {
-    font-size: 1.2rem;
-  }
-
-  /* Showcase Highlights-Header */
-  #showcase #showcaseHighlights {
-    margin: 0;
-    padding: 1rem 2rem;
-    margin-top: 4rem;
-  }
-
-  #showcase #showcaseHighlights div {
-    padding: 1rem 0;
-  }
-
-  /* About */
+/* landscape */
+@media (min-width: 660px) and (max-width: 668px) and (orientation: landscape) {
   #about {
-    margin: 0;
-    padding: 0;
-    padding: 2rem !important;
-    margin-top: 68rem;
-  }
-
-  #about h1 {
-    font-size: 2rem;
-  }
-
-  #about p {
-    font-size: 1.2rem;
-  }
-
-  #about .card {
-    width: 60%;
-    margin: 2rem auto;
-  }
-
-  .card-img-top {
-    width: 100%;
-    height: 40vh;
-    object-fit: cover;
-  }
-
-  #about .card:first-child {
-    margin-top: 0;
-  }
-  #contact .contact-image img {
-    display: none;
+    margin-top: 36rem;
   }
 }
 
-@media (min-width: 768px) and (max-width: 1023px) {
+/* Samsung a22 */
+@media (min-width: 377px) and (max-width: 399px) and (orientation: portrait) {
   #about {
-    margin-top: 0;
+    margin-top: 27rem;
   }
+}
+@media (min-width: 400px) and (max-width: 413px) and (orientation: portrait) {
+  #about {
+    margin-top: 20rem;
+  }
+}
+
+
+/* IPHONE XR */
+@media (min-width: 414px) and (max-width: 415px) and (orientation: portrait) {
+  #about {
+    margin-top: 14rem;
+  }
+}
+
+@media (min-width: 669px) and (max-width: 897px) and (orientation: landscape) {
+  #about {
+    margin-top: 14rem;
+  }
+}
+
+/* IPHONE 12 pro */
+@media (min-width: 390px) and (max-width: 400px) and (orientation: portrait) {
+  #about {
+    margin-top: 24rem;
+  }
+}
+
+@media (min-width: 800px) and (max-width: 845px) and (orientation: landscape) {
+  #about {
+    margin-top: 16rem;
+  }
+}
+
+/* IPHONE 14 */
+@media (min-width: 430px) and (max-width: 450px) and (orientation: portrait) {
+  #about {
+    margin-top: 12rem;
+  }
+}
+
+@media (min-width: 900px) and (max-width: 932px) and (orientation: landscape) {
+  #about {
+    margin-top: 16rem;
+  }
+}
+
+/* Galaxy s8 */
+@media (min-width: 730px) and (max-width: 741px) and (orientation: landscape) {
+  #about {
+    margin-top: 36rem;
+  }
+}
+
+/* @media (min-height: 300px) and (max-height: 750px) and (max-width: 750px) {
+  #about {
+    margin-top: 36rem;
+  }
+}
+
+@media (min-height: 811px) and (max-height: 890px) and (max-width: 750px) {
+  #about {
+    margin-top: 23rem;
+  }
+}
+
+@media (min-height: 890px) and (max-height: 950px) and (max-width: 750px) {
+  #about {
+    margin-top: 15rem;
+  }
+} */
+
+@media (min-width: 665px) and (max-width: 1023px) {
   #contact .contact-image img {
     display: none;
   }

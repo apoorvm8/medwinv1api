@@ -4,7 +4,7 @@
         <div class="row mt-3">
             <div class="col-sm-12 col-lg-6 pt-2">
                 <p>
-                    Copyright &copy; 2020 Medwin Softwares, All Rights Reserved
+                    Copyright &copy; 2024 Medwin Softwares, All Rights Reserved
                 </p>
             </div>
             <div class="col-sm-12 col-lg-6">
@@ -16,7 +16,7 @@
                         <a href="{{ !(request()->is('/')) ? route('contact') : '#contact' }}">Contact</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="#">Sitemap</a>
+                        <a href="{{url('sitemap.xml')}}">Sitemap</a>
                     </li>
                     <li class="breadcrumb-item">
                         <a href="#">Terms and Conditions</a>

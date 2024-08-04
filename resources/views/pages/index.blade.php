@@ -7,58 +7,59 @@
 
 {{-- Showcase --}}
 <header id="showcase">
-    <div class="showcase-content">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 showcase-text order-2 order-md-1">
-                    <h1 class="lg-h">
-                        Welcome to
-                        <span class="primary-color">Medwin</span> Softwares
-                    </h1>
-                    <p class="lead secondary-color mt-4">
-                        Providing best softwares for Pharmacy, Departmental Store, Footwear, Bookstore
-                        and many more since two decade.
-                    </p>
-                    <a href="#about" class="about-btn btn btn-primary btn-lg px-md-5 mt-md-4">About</a>
-                    <a href="#features" class="features-btn btn btn-secondary btn-lg px-md-4 mt-md-4 ml-4">Features</a>
+    <div class="showcase-container">
+        <div class="showcase-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center showcase-text mx-auto">
+                        <h1 class="lg-h font-weight-bold">
+                            <span class="primary-color">Medwin</span> Softwares
+                        </h1>
+                        <p class="lead text-dark mt-4 font-weight-bold">
+                            Providing best softwares for Pharmacy, Departmental Store, Footwear, Bookstore
+                            and many more since two decade.
+                        </p>
+                        <a href="#about" class="about-btn btn btn-primary btn-lg px-md-5 mt-md-4">About</a>
+                        <a href="#features" class="features-btn btn btn-secondary btn-lg px-md-4 mt-md-4 ml-4">Features</a>
+                    </div>
+                    {{-- <div class="col-md-4 showcase-img order-1 order-md-2">
+                        <img src="{{asset('assets/img/inventory-soft-img.png')}}" alt="" class="img-fluid" />
+                    </div> --}}
                 </div>
-                <div class="col-md-5 showcase-img order-1 order-md-2">
-                    <img src="{{asset('assets/img/collage6.png')}}" alt="" class="img-fluid" />
+                <div id="showcaseHighlights" class="row">
+                    <div class="col-md-4 d-flex flex-column">
+                        <h1 class="h4 pl-1">
+                            <i class="fa fa-plus px-2 py-1"></i>
+                        </h1>
+                        <h1 class="h4 my-3 font-weight-bold">Best Software</h1>
+                        <p class="secondary-color font-weight-bold">
+                            We provide best softwares in all trades with inventory and accounting services for Wholesale and
+                            Retail users
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <h1 class="h4 pl-1">
+                            <i class="fa fa-chart-line px-2 py-1"></i>
+                        </h1>
+                        <h1 class="h4 my-3 font-weight-bold">GST Compliant</h1>
+                        <p class="secondary-color font-weight-bold">
+                            Generate GST compliant invoices, keep track of all compliance requirements and generate all GST
+                            returns and reports.
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <h1 class="h4 pl-1">
+                            <i class="fa fa-rupee-sign px-2 py-1"></i>
+                        </h1>
+                        <h1 class="h4 my-3 font-weight-bold">Simple And Affordable Price</h1>
+                        <p class="secondary-color font-weight-bold">
+                            Our softwares are simple yet provides all features at a reasonably affordable price for all
+                            trade users.
+                        </p>
+                    </div>
                 </div>
             </div>
-            <div id="showcaseHighlights" class="row">
-                <div class="col-md-4 d-flex flex-column">
-                    <h1 class="h4 pl-1">
-                        <i class="fa fa-plus px-2 py-1"></i>
-                    </h1>
-                    <h1 class="h4 my-3">Best Software</h1>
-                    <p class="secondary-color">
-                        We provide best softwares in all trades with inventory and accounting services for Wholesale and
-                        Retail users
-                    </p>
-                </div>
-                <div class="col-md-4">
-                    <h1 class="h4 pl-1">
-                        <i class="fa fa-chart-line px-2 py-1"></i>
-                    </h1>
-                    <h1 class="h4 my-3">GST Compliant</h1>
-                    <p class="secondary-color">
-                        Generate GST compliant invoices, keep track of all compliance requirements and generate all GST
-                        returns and reports.
-                    </p>
-                </div>
-                <div class="col-md-4">
-                    <h1 class="h4 pl-1">
-                        <i class="fa fa-rupee-sign px-2 py-1"></i>
-                    </h1>
-                    <h1 class="h4 my-3">Simple And Affordable Price</h1>
-                    <p class="secondary-color">
-                        Our softwares are simple yet provides all features at a reasonably affordable price for all
-                        trade users.
-                    </p>
-                </div>
-            </div>
-        </div>
+        </div> 
     </div>
 </header>
 {{-- End of showcase --}}
@@ -67,10 +68,10 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12 m-auto">
-                <h1 class="md-h text-center">
+                <h1 class="md-h text-center font-weight-bold">
                     <i class="fa fa-question px-2 py-1"></i> About
                 </h1>
-                <p class="lead secondary-color mt-4 d-none d-md-block">
+                <p class="lead secondary-color mt-4 d-none d-md-block" style="line-height: 2rem">
                     Medwin Softwares is a software provider company providing
                     simple and easy to use yet refined and reliable softwares. We
                     have been providing software solutions to small and medium
@@ -88,95 +89,13 @@
                 </p>
             </div>
         </div>
-        <div class="row">
-            <div class="col">
-                <h2 class="font-weight-bold mt-5 text-center d-none d-md-block">
-                    Retail And Wholesale Inventory Softwares
-                </h2>
-                <h4 class="font-weight-bold mt-5 text-center d-md-none d-block">
-                    Retail And Wholesale Inventory Softwares
-                </h4>
-            </div>
-        </div>
-        <div class="row mt-5">
-            <div class="col-md-6 col-lg-3 cardLeft">
-                <div class="card card-light">
-                    <div class="card-header bg-white">
-                        <img src="{{asset('assets/img/pharmacyimg1.png')}}" class="card-img-top" />
-                    </div>
-                    <div class="card-body">
-                        <h1 class="h4 card-title">Pharma</h1>
-                        <p class="card-text secondary-color">
-                            Our software provides easy invoicing, Purchase entry,
-                            Purchase import, Batchwise stock report, Expiry list...
-                        </p>
-                    </div>
-                    <div class="card-footer">
-                        <a href="{{route('pharmacy')}}" class="btn btn-primary btn-block">View More</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3 cardLeft">
-                <div class="card card-light">
-                    <div class="card-header bg-white">
-                        <img src="{{asset('assets/img/grocery1.png')}}" class="card-img-top" />
-                    </div>
-                    <div class="card-body">
-                        <h1 class="h4 card-title">Departmental</h1>
-                        <p class="card-text secondary-color">
-                            All purpose retail and wholesale software. Easy invoicing,
-                            Purchase entry, Purchase return and more.
-                            <span class="d-md-block d-lg-none">Purchase return, Sale return.</span>
-                        </p>
-                    </div>
-                    <div class="card-footer">
-                        <a href="{{route('departmental')}}" class="btn btn-primary btn-block">View More</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3 cardRight">
-                <div class="card card-light mt-md-3 mt-lg-0">
-                    <div class="card-header bg-white">
-                        <img src="{{asset('assets/img/bookstore.png')}}" class="card-img-top" />
-                    </div>
-                    <div class="card-body">
-                        <h1 class="h4 card-title">Bookstore</h1>
-                        <p class="card-text secondary-color">
-                            Easy billing, Import purchase, Publisher wise, Author
-                            wise, Genre wise reports and Fast search...
-                        </p>
-                    </div>
-                    <div class="card-footer">
-                        <a href="{{route('bookstore')}}" class="btn btn-primary btn-block">View More</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3 cardRight">
-                <div class="card mt-md-3 mt-lg-0">
-                    <div class="card-header bg-white">
-                        <img src="{{asset('assets/img/shoes1.png')}}" class="card-img-top" />
-                    </div>
-                    <div class="card-body">
-                        <h1 class="h4 card-title">Footwear</h1>
-                        <p class="card-text secondary-color">
-                            All purpose retail and wholesale software. Easy billing,
-                            Purchase entry, Import purchase and more.
-                        </p>
-                    </div>
-                    <div class="card-footer">
-                        <a href="{{route('footwear')}}" class="btn btn-primary btn-block">View More</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- </div> -->
 </section>
 <!-- Features -->
 <section id="features" class="p-4 pt-5 text-center text-md-left">
     <div class="container">
         <div class="row">
             <div class="col">
-                <h1 class="md-h text-center">
+                <h1 class="md-h text-center font-weight-bold">
                     <i class="fa fa-check px-2 py-1"></i> Main Features
                 </h1>
             </div>
@@ -297,7 +216,7 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <h1 class="md-h text-center">
+                <h1 class="md-h text-center font-weight-bold">
                     <i style="color: var(--primary-color);" class="fa fa-address-book px-2 py-1"></i>
                     Contact Us
                 </h1>
