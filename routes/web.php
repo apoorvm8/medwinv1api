@@ -18,6 +18,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get("sitemap.xml" , function () {
+    return \Illuminate\Support\Facades\Redirect::to('sitemap.xml');
+});
+
 Route::post('/backup-file-bysoft', [FileApiController::class, 'backupFileBySoft']);
 Route::get('/downloadBySoft', [FileApiController::class, 'downloadBySoft']);
 Route::get('/downloadBySoftOther', [FileApiController::class, 'downloadBySoftOther']);
