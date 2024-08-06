@@ -9,9 +9,9 @@ use Illuminate\Http\Request;
 class PagesController extends Controller
 {
     public function index() {
-        Meta::setTitle('Inventory Software | Retail Softwares | GST Softwares | Accounting Software | Wholesale Software');
-        Meta::setKeywords(['Inventory Software', 'Accounting Software', 'Billing Software', 'Gst Software', 'Erp Software']);
-        Meta::setDescription('Inventory and Accounting Software for Retailers, Wholesalers, Gst Billing & Filing, Stock management, Report Generation');
+        Meta::setTitle('Pharmacy Software | Inventory Software | Retail Softwares | GST Softwares | Accounting Software | Wholesale Software');
+        Meta::setKeywords(['Pharmacy Software', 'Inventory Software', 'Accounting Software', 'Billing Software', 'Gst Software', 'Erp Software']);
+        Meta::setDescription('Pharmacy Software, Inventory and Accounting Software for Retailers, Wholesalers, Gst Billing, Filing, Stock management, Report Generation');
 
         return view('pages.index');
     }    
