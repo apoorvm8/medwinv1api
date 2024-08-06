@@ -46,7 +46,6 @@ Route::group(['prefix' => 'customer'], function() {
 Route::get('/', [PagesController::class, 'index'])->name('index');
 Route::get('/contact', [PagesController::class, 'contact'])->name('contact');
 Route::get('/terms_and_conditions', [PagesController::class, 'terms_and_condition'])->name('terms_and_conditions');
-Route::get('/sitemap', [PagesController::class, 'sitemap'])->name('sitemap');
 Route::get('retail/pharma', [PagesController::class, 'retail_pharma'])->name('pharmacy');
 Route::get('retail/bookstore', [PagesController::class, 'retail_bookstore'])->name('bookstore');
 Route::get('retail/footwear', [PagesController::class, 'retail_footwear'])->name('footwear');
