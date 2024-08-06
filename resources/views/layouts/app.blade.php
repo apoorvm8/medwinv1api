@@ -20,7 +20,7 @@
     <script type="application/ld+json">
         { 
 		  "@context" : "http://schema.org","@type" : "LocalBusiness","name" : "Medwin Softwares","address": {
-            "@type": "PostalAddress","addressLocality" : "New Delhi","addressRegion" : "New Delhi","postalCode" : "110037"},"description" : "Retail Softwares, Inventory Softwares, Pharamacy Softwares, Bookstore Softwares, Footwear Softwares, Departmental Softwares, POS, Pharma POS, GST software","url" : "http://www.medwinsoftwares.in","logo" : "http://www.medwinsoftwares.in/assets/img/main_logo.jpg","openingHours": "Mo,Tu,We,Th,Fr,Sa,Su"
+            "@type": "PostalAddress","addressLocality" : "New Delhi","addressRegion" : "New Delhi","postalCode" : "110037"},"description" : "Retail Softwares, Inventory Softwares, Pharamacy Softwares, Bookstore Softwares, Footwear Softwares, Departmental Softwares, POS, Pharma POS, GST software","url" : "https://www.medwinsoftwares.in","logo" : "https://www.medwinsoftwares.in/assets/img/main_logo.jpg","openingHours": "Mo,Tu,We,Th,Fr,Sa,Su"
         } 
     </script>
     <!-- Fonts -->

@@ -55,12 +55,7 @@ class PagesController extends Controller
         Meta::setDescription('Medwin Departmental Store Software- All purpose retail and wholesale software. Easy invoicing, Purchase entry, Purchase return, Sale return. All Sale, Stock and Purchase reports available. Profit report, Stock and Sales statement. Barcode search, Accounting, GST reports are all available.');
         return view('pages.retail.departmental');
     }
-
-    public function sitemap() {
-        Meta::setTitle('Sitemap');
-        return view('pages.sitemap');
-    }
-
+    
     public function file_download(Request $request, $fileId) {
         return;
     }
