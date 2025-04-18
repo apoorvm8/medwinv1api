@@ -24,9 +24,16 @@ class CustomerMsgController extends Controller
     }
 
     public function update(Request $request) {
-        app(CustomerMsgService::class)->bulkMarkAsSeen($request->all());
+        app(CustomerMsgService::class)->bulkAction($request->all());
         return response([
             'success' => true, 'msg' => 'Selected records marked as seen successfully.', 'data' => []
+        ]);
+    }
+
+    public function delete(Request $request) {
+        app(CustomerMsgService::class)->bulkAction($request->all());
+        return response([
+            'success' => true, 'msg' => 'Selected records deleted successfully.', 'data' => []
         ]);
     }
 

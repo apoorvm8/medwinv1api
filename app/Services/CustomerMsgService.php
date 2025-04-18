@@ -45,6 +45,16 @@ class CustomerMsgService
       return $query->paginate($params["pageSize"], ['*'], 'page', $params['page']);
    }
 
+   public function bulkAction($data) {
+      if($data['actionType'] == 'deletemsgs') {
+         $this->bulkMarkAsDelete($data);
+      } 
+
+      if($data['actionType'] == 'markmsgs') {
+         $this->bulkMarkAsSeen($data);
+      }
+   }
+   
    public function bulkMarkAsSeen($data) {
         try {
             $encodedIds = json_decode($data['idsStr'], true);
@@ -57,5 +67,18 @@ class CustomerMsgService
             throw new Exception("Error in marking the selected records as seen." . $ex->getMessage());
         }
     }
+
+   public function bulkMarkAsDelete($data) {
+      try {
+         $encodedIds = json_decode($data['idsStr'], true);
+         $ids = [];
+         foreach($encodedIds as $encodedId) {
+             $ids[] = $this->decode($encodedId, "Customer Messages");
+         }
+         CustomerMsg::whereIn('id', $ids)->delete();
+     } catch (Exception $ex) {
+         throw new Exception("Error in deleting the marked records." . $ex->getMessage());
+     }
+   }
 }
 

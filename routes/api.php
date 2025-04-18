@@ -72,6 +72,7 @@ Route::group(['prefix' => 'customers', 'middleware' => ['auth:sanctum']], functi
     Route::put('/update-password/{acctno}', [CustomerApiController::class, 'updatePassword'])->middleware('permission:customer_backup_toggle');
     Route::get('/messages', [CustomerMsgController::class, 'get'])->middleware('permission:messages_view');
     Route::put('/messages', [CustomerMsgController::class, 'update'])->middleware('permission:messages_update');
+    Route::delete('/messages', [CustomerMsgController::class, 'delete'])->middleware('permission:messages_update');
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
