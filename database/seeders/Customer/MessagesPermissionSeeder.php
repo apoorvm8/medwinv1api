@@ -28,5 +28,11 @@ class MessagesPermissionSeeder extends Seeder
             Permission::create(['name' => 'messages_update', 'guard_name' => 'sanctum', 
             'group_name' => 'message']);
         }
+
+        // create permissions
+        if(!Permission::where('name', 'messages_delete')->first()) {
+            Permission::create(['name' => 'messages_delete', 'guard_name' => 'sanctum', 
+            'group_name' => 'message']);
+        }
     }
 }
