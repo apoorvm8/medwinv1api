@@ -1,3 +1,27 @@
+# Admin Panel Backend (Laravel + Sanctum + Amazon S3)
+
+This is the backend API for a full-featured admin panel built with **Laravel**. It handles authentication, folder management, background syncing to **Amazon S3**, and role-based access control using **Spatie**. The system currently supports **840+ active customers** and integrates with a React frontend.
+
+## ⚙️ Tech Stack
+
+- Laravel 10+
+- Sanctum (API Authentication)
+- Spatie (Roles & Permissions)
+- Amazon S3 (Storage)
+- MySQL
+- Laravel Queues, Cron Jobs
+- GitHub → AWS LightSail Deployment (manual pipeline)
+
+## 📦 Core Features
+
+- **RESTful APIs** for folder CRUD, file sync, user management, and auth
+- Tree-structured folder hierarchy synced between frontend and backend
+- Background script that transfers user folders to **Amazon S3**
+- Role-based access using **Spatie Laravel Permissions**
+- Secure authentication via **Sanctum** with token-based API access
+- Git-managed deployment to **AWS LightSail**
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
