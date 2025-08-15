@@ -31,7 +31,7 @@ class FileApiController extends Controller
             $errors = [];
             $maxFilesAllowed = 3;
             $validator = Validator::make($request->all(), [
-                'uploadFile' => 'required|file|max:80000',
+                'uploadFile' => 'required|file|min:1|max:80000',
                 'password' => 'required',
                 'uploadSpace' => 'required',
                 'cuserid' => 'required',
@@ -53,6 +53,10 @@ class FileApiController extends Controller
 
                 if(isset($failedRules['uploadFile']['Max'])) {
                     $errors['uploadFile'] = "Size cannot exceed 80mb.";
+                }
+
+                if(isset($failedRules['uploadFile']['Min'])) {
+                    $errors['uploadFile'] = "Size must be at least 1 byte.";
                 }
 
                 if(isset($failedRules['password']['Required'])) {
