@@ -15,6 +15,7 @@ use App\Services\CustomerStockAccessService;
 use App\Services\CustomerWhatsappService;
 use App\Services\EinvoiceService;
 use App\Traits\HashIds;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Crypt;
@@ -188,6 +189,18 @@ class CustomerDataApiController extends Controller
             if(!$eInvoice || (!$eInvoice->active))
                 return response()->json(['success' => true, 'msg' => 'Customer E-Invoice Not Active', 'active' => false, 'data' => []], 200);
                 
+             // Check expiry
+            if(!$eInvoice->next_amc_date) {
+                return response(['success' => false, 'msg' => 'E-Invoice Amc date has expired. Please renew'], Response::HTTP_BAD_REQUEST);
+            }
+            
+            if($eInvoice->next_amc_date) {
+                if(Carbon::parse($eInvoice->next_amc_date)->lt(Carbon::now()->format('Y-m-d'))) {
+                    $formattedDate = Carbon::parse($eInvoice->next_amc_date)->format('d/m/Y');
+                    return response(['success' => false, 'msg' => "E-Invoice Amc date has expired on $formattedDate. Please renew"], Response::HTTP_BAD_REQUEST); 
+                }
+            }
+
             return response()->json(['success' => true, 'msg' => 'Customer E-Invoice Active', 'active' => true, 'data' => [
                 'username' => $eInvoice->username, 'password'=> $eInvoice->password ? Crypt::decrypt($eInvoice->password) : null, 'ipaddress' => $eInvoice->ipaddress
             ]], 200);

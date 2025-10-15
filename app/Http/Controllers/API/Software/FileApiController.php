@@ -10,6 +10,7 @@ use App\Models\FolderMaster;
 use App\Models\User;
 use App\Services\FolderService;
 use App\Traits\HashIds;
+use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Exception;
 use Illuminate\Http\Request;
@@ -97,6 +98,18 @@ class FileApiController extends Controller
             
                 if(!$backupCustomer)
                     return response(['success' => false, 'msg' => 'Backup service not enabled or inactive for customer.'], Response::HTTP_NOT_FOUND); 
+
+                // Check expiry
+                if(!$backupCustomer->next_amc_date) {
+                    return response(['success' => false, 'msg' => 'Cloud backup amc date has expired. Please renew'], Response::HTTP_BAD_REQUEST); 
+                }
+                
+                if($backupCustomer->next_amc_date) {
+                    if(Carbon::parse($backupCustomer->next_amc_date)->lt(Carbon::now()->format('Y-m-d'))) {
+                      $formattedDate = Carbon::parse($backupCustomer->next_amc_date)->format('d/m/Y');
+                      return response(['success' => false, 'msg' => "Cloud Backup Amc date has expired on $formattedDate. Please renew"], Response::HTTP_BAD_REQUEST); 
+                    }
+                }
 
                 // Check if customer folder is still present
                 $customerFolder = FolderMaster::find($backupCustomer->folder_id);
