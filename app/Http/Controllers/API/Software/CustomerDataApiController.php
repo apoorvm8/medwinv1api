@@ -202,7 +202,8 @@ class CustomerDataApiController extends Controller
             }
 
             return response()->json(['success' => true, 'msg' => 'Customer E-Invoice Active', 'active' => true, 'data' => [
-                'username' => $eInvoice->username, 'password'=> $eInvoice->password ? Crypt::decrypt($eInvoice->password) : null, 'ipaddress' => $eInvoice->ipaddress
+                'username' => $eInvoice->username, 'password'=> $eInvoice->password ? Crypt::decrypt($eInvoice->password) : null, 'ipaddress' => $eInvoice->ipaddress,
+                'nextamcdate' => $eInvoice->next_amc_date ? Carbon::parse($eInvoice->next_amc_date)->format('d/m/Y') : ''
             ]], 200);
         } else {
             return response()->json(['success' => false, 'msg' => 'Please provide valid acctno', 'data' => []], 400);

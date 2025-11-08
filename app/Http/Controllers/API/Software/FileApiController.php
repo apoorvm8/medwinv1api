@@ -178,7 +178,9 @@ class FileApiController extends Controller
                     // app(FolderService::class)->updateFileSize([$file], null);
                     $file->updated_at = now();
                     $file->save();
-                    $data = ['msg' => 'Id of uploaded file','id' => $file->id];
+                    $data = ['msg' => 'Id of uploaded file','id' => $file->id, 
+                    'nextamcdate' => $backupCustomer->next_amc_date ? Carbon::parse($backupCustomer->next_amc_date)->format('d/m/Y') : ''
+                    ];
                 } else {
                     $slug = SlugService::createSlug(FolderMaster::class, 'slug', $fileName, ['unique' => true]);
                 
@@ -222,7 +224,8 @@ class FileApiController extends Controller
                         app(FolderService::class)->updateUserFolderPermissions([$permissionRow], $this->encode(['id' => $resource->id]), true, null);
                     }
                     
-                    $data = ['msg' => 'Id of uploaded file', 'id' => $resource->id];
+                    $data = ['msg' => 'Id of uploaded file', 'id' => $resource->id, 
+                    'nextamcdate' => $backupCustomer->next_amc_date ? Carbon::parse($backupCustomer->next_amc_date)->format('d/m/Y') : ''];
                 }
                 
                 // app(FolderService::class)->resetFolderSizeUp($folder);
