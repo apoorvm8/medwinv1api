@@ -26,7 +26,7 @@ class CustomerData extends Authenticatable
         'softwaretype', 'installdate', 'nextamcdate',
         'amcamount', 'recvamount', 'activestatus',
         'acctcode', 'sub3code', 'email', 'created_at', 'updated_at', 'narration',
-        'softref', 'password'
+        'softref', 'password', 'linked_outlet_ids'
     ];
 
     // address is combination of subadd1, subadd2, subadd3
