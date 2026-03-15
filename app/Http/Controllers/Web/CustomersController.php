@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\CustomerBackup;
 use App\Models\CustomerData;
+use App\Models\CustomerStockAccess;
 use App\Models\FolderMaster;
 use App\Services\CustomerBackupService;
+use App\Services\CustomerStockAccessService;
 use App\Services\FolderService;
 use App\Traits\HashIds;
 use Illuminate\Contracts\Encryption\DecryptException;
@@ -61,6 +63,52 @@ class CustomersController extends Controller
 
         $fileArr = app(CustomerBackupService::class)->getBackupByType("currentyear", $customerFolder);
         return view('customer.backup')->with(['fileArr' => $fileArr]);
+    }
+
+    /**
+     * @desc Method To Get the stock data view (same logic as backup: require active stock access).
+     */
+    public function stockData() {
+        $user = Auth::guard('customer')->user();
+        $acctno = $user->acctno;
+        $linked = $user->linked_outlet_ids ? array_map('trim', explode(',', $user->linked_outlet_ids)) : [];
+        $linked = array_filter($linked);
+        $acctnos = array_values(array_unique(array_merge([$acctno], $linked)));
+        $names = CustomerData::whereIn('acctno', $acctnos)->pluck('subdesc', 'acctno')->toArray();
+        $outletOptions = [];
+        foreach ($acctnos as $id) {
+            $name = $names[$id] ?? $id;
+            $outletOptions[] = ['value' => (string) $id, 'label' => $name . ' (' . $id . ')'];
+        }
+        $outletOptions[] = ['value' => 'all', 'label' => 'All'];
+        return view('customer.stockdata', [
+            'outletOptions' => $outletOptions,
+            'defaultOutlet' => (string) $acctno,
+        ]);
+    }
+
+    /**
+     * @desc Yajra DataTables AJAX: returns stock_view_data for selected outlet(s).
+     */
+    public function stockDataTable(Request $request) {
+        $customerStockAccess = CustomerStockAccess::where('acctno', Auth::guard('customer')->user()->acctno)->where('active', 1)->first();
+        if (!$customerStockAccess) {
+            return response()->json([], Response::HTTP_UNAUTHORIZED);
+        }
+        $user = Auth::guard('customer')->user();
+        $acctno = $user->acctno;
+        $linked = $user->linked_outlet_ids ? array_map('trim', explode(',', $user->linked_outlet_ids)) : [];
+        $linked = array_filter($linked);
+        $allowed = array_merge([$acctno], $linked);
+        $outlet = $request->get('outlet', $acctno);
+        if ($outlet === 'all') {
+            $acctnos = array_values(array_unique($allowed));
+            return app(CustomerStockAccessService::class)->getStockDataDataTable($acctnos);
+        }
+        if (!in_array((string) $outlet, array_map('strval', $allowed), true)) {
+            return response()->json([], Response::HTTP_FORBIDDEN);
+        }
+        return app(CustomerStockAccessService::class)->getStockDataDataTable($outlet);
     }
 
     public function fetchBackup(Request $request) {

@@ -65,6 +65,20 @@
                   </a>
                 </div>
             </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-warning">
+                  <a href="{{route('customer.stockdata')}}" class="small-box-footer" style="text-decoration: none; color:white !important;">
+                    <div class="text-center inner customCardBox">
+                      <h1 class="h3 d-none d-md-block mt-1" style="font-weight:300;">Stock Data</h1>
+                      <h5 class="d-block d-md-none" style="font-size: 1.1rem;font-weight:400;">Stock Data</h5>
+                        <i class="d-none d-md-block fas fa-boxes fa-3x"></i>
+                        <i class="d-block d-md-none fas fa-boxes fa-2x"></i>
+                    </div>
+                    <hr>
+                    Go <i class="fas fa-arrow-circle-right"></i>
+                  </a>
+                </div>
+            </div>
         </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->

@@ -8,6 +8,7 @@ use App\Models\CustomerData;
 use App\Models\CustomerStockAccess;
 use App\Models\FolderMaster;
 use App\Models\User;
+use App\Services\CustomerStockAccessService;
 use App\Services\FolderService;
 use App\Traits\HashIds;
 use Carbon\Carbon;
@@ -571,6 +572,9 @@ class FileApiController extends Controller
     
                     $data = ['msg' => 'Id of uploaded file', 'id' => $resource->id];
                 }
+
+                // Load CSV into stock_view_data (delete existing rows for this Division, then bulk insert)
+                app(CustomerStockAccessService::class)->importStockFromCsv($request->uploadFile);
 
                 // app(FolderService::class)->resetFolderSizeUp($folder);
                 // app(FolderService::class)->resetChildCountUp($folder);

@@ -41,7 +41,23 @@
                 Dashboard
               </p>
             </a>
-          </li>       
+          </li>      
+          <li class="nav-item">
+            <a href="{{route('customer.backup')}}" class="nav-link {{request()->is('customer/backup') ? 'active' : ''}}">
+              <i class="nav-icon fas fa-database"></i>
+              <p>
+                Backup
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{route('customer.stockdata')}}" class="nav-link {{request()->is('customer/stock-data') ? 'active' : ''}}">
+              <i class="nav-icon fas fa-boxes"></i>
+              <p>
+                Stock Data
+              </p>
+            </a>
+          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

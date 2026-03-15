@@ -50,11 +50,11 @@ class CustomerLoginController extends Controller
         $customer = CustomerData::where('acctno', $request->input('customer_id'))->first();
         if($customer) {
             // Verify that this customer has a folder
-            $customerFolder = CustomerBackup::where('acctno', $request->customer_id)->where('active', 1)->first();
-            if(!$customerFolder) {
-                $errors['customer_id'] = ["You do not have backup access. Please contact admin."];
-                return response()->json(['success' => false, 'errors' => $errors], Response::HTTP_NOT_FOUND);
-            }
+            // $customerFolder = CustomerBackup::where('acctno', $request->customer_id)->where('active', 1)->first();
+            // if(!$customerFolder) {
+            //     $errors['customer_id'] = ["You do not have backup access. Please contact admin."];
+            //     return response()->json(['success' => false, 'errors' => $errors], Response::HTTP_NOT_FOUND);
+            // }
             
 
             if($customer->activestatus != "Y") {
