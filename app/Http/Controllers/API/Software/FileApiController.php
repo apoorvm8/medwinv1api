@@ -574,7 +574,7 @@ class FileApiController extends Controller
                 }
 
                 // Load CSV into stock_view_data (delete existing rows for this Division, then bulk insert)
-                app(CustomerStockAccessService::class)->importStockFromCsv($request->uploadFile);
+                // app(CustomerStockAccessService::class)->importStockFromCsv($request->uploadFile);
 
                 // app(FolderService::class)->resetFolderSizeUp($folder);
                 // app(FolderService::class)->resetChildCountUp($folder);
