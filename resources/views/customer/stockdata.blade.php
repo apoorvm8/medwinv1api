@@ -135,7 +135,7 @@ $(function() {
         var val = $('#outletSelect').val();
         var map = window.STOCK_FILE_LAST_UPDATED || {};
         if (val === 'all') {
-            $('#fileLastUpdatedText').text('File last updated: select an outlet to see the cloud file time for that outlet.');
+            $('#fileLastUpdatedText').text('');
             return;
         }
         var t = map[val];
