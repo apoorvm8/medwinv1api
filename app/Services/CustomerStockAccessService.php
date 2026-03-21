@@ -3,10 +3,13 @@
 namespace App\Services;
 
 use App\Models\CustomerStockAccess;
-use App\Models\Einvoice;
+use App\Models\FolderMaster;
 use App\Traits\HashIds;
 use Carbon\Carbon;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Throwable;
 use Yajra\DataTables\Facades\DataTables;
 
 class CustomerStockAccessService
@@ -86,6 +89,216 @@ class CustomerStockAccessService
       if (!empty($chunk)) {
          DB::table('stock_view_data')->insert($chunk);
       }
+   }
+
+   /**
+    * Per outlet: one CSV per acctno, filename must start with c{acctno}_ or {acctno}_.
+    * Compare S3 Last-Modified with customer_stock_access.last_modified_at; skip import if not newer.
+    *
+    * @return array{success: bool, message: string, skipped?: bool}
+    */
+   public function refreshStockFromS3(int $acctno): array
+   {
+      $stockAccess = CustomerStockAccess::where('acctno', $acctno)->where('active', 1)->first();
+      if (!$stockAccess) {
+         return ['success' => false, 'message' => 'Stock access is not enabled for this outlet.'];
+      }
+
+      $folder = FolderMaster::find($stockAccess->folder_id);
+      if (!$folder) {
+         return ['success' => false, 'message' => 'Stock folder not found.'];
+      }
+
+      $csvFiles = FolderMaster::where('parent_id', $folder->id)
+         ->where('resource_type', FolderMaster::RESOURCE_TYPE_FILE)
+         ->orderBy('name')
+         ->get()
+         ->filter(function ($f) use ($acctno) {
+            return $f->name
+               && str_ends_with(strtolower($f->name), '.csv')
+               && $this->isStockCsvFilenameForOutlet($f->name, $acctno);
+         })
+         ->values();
+
+      if ($csvFiles->isEmpty()) {
+         return ['success' => false, 'message' => 'No stock CSV file found for outlet '.$acctno.' (expected filename starting with c'.$acctno.'_ or '.$acctno.'_).'];
+      }
+
+      if ($csvFiles->count() > 1) {
+         return ['success' => false, 'message' => 'Multiple CSV files match outlet '.$acctno.'; expected exactly one.'];
+      }
+
+      /** @var FolderMaster $file */
+      $file = $csvFiles->first();
+      if (!$file->path) {
+         return ['success' => false, 'message' => 'Stock CSV path is missing for outlet '.$acctno.'.'];
+      }
+
+      $disk = Storage::disk('s3');
+      if (!$disk->exists($file->path)) {
+         return ['success' => false, 'message' => 'Stock CSV is missing on storage for outlet '.$acctno.'.'];
+      }
+
+      $s3Lm = $disk->lastModified($file->path);
+
+      $dbLm = $stockAccess->last_modified_at ? $stockAccess->last_modified_at->getTimestamp() : null;
+      if ($dbLm !== null && $s3Lm <= $dbLm) {
+         return [
+            'success' => true,
+            'skipped' => true,
+            'message' => 'Already latest stock updated.',
+         ];
+      }
+
+      try {
+         $localPath = tempnam(sys_get_temp_dir(), 'stock_csv_');
+         if ($localPath === false) {
+            throw new \RuntimeException('Could not create a temporary file for import.');
+         }
+
+         try {
+            $stream = $disk->readStream($file->path);
+            if ($stream === false) {
+               throw new \RuntimeException('Could not read file from storage: '.$file->name);
+            }
+            $target = fopen($localPath, 'wb');
+            if ($target === false) {
+               if (is_resource($stream)) {
+                  fclose($stream);
+               }
+               throw new \RuntimeException('Could not open temporary file for writing.');
+            }
+            stream_copy_to_stream($stream, $target);
+            fclose($target);
+            if (is_resource($stream)) {
+               fclose($stream);
+            }
+
+            $uploaded = new UploadedFile($localPath, $file->name, 'text/csv', null, true);
+            $this->importStockFromCsv($uploaded);
+         } finally {
+            if (is_file($localPath)) {
+               @unlink($localPath);
+            }
+         }
+
+         $stockAccess->last_modified_at = Carbon::createFromTimestamp($s3Lm);
+         $stockAccess->save();
+      } catch (Throwable $e) {
+         report($e);
+
+         return [
+            'success' => false,
+            'message' => 'Import failed: '.$e->getMessage(),
+         ];
+      }
+
+      return [
+         'success' => true,
+         'skipped' => false,
+         'message' => 'Stock data refreshed.',
+      ];
+   }
+
+   /**
+    * Run refreshStockFromS3 for every outlet account (main + linked).
+    *
+    * @param  array<int|string>  $acctnos
+    * @return array{
+    *   success: bool,
+    *   message: string,
+    *   imported_count: int,
+    *   skipped_count: int,
+    *   failed_count: int,
+    *   outlets: list<array{acctno: int, status: 'imported'|'skipped'|'failed', message: string}>
+    * }
+    */
+   public function refreshStockForAllOutlets(array $acctnos): array
+   {
+      $acctnos = array_values(array_unique(array_map('intval', $acctnos)));
+
+      $outlets = [];
+      $importedCount = 0;
+      $skippedCount = 0;
+      $failedCount = 0;
+
+      foreach ($acctnos as $acctno) {
+         $r = $this->refreshStockFromS3($acctno);
+
+         if (! $r['success']) {
+            $failedCount++;
+            $outlets[] = [
+               'acctno' => $acctno,
+               'status' => 'failed',
+               'message' => $r['message'],
+            ];
+
+            continue;
+         }
+
+         if (! empty($r['skipped'])) {
+            $skippedCount++;
+            $outlets[] = [
+               'acctno' => $acctno,
+               'status' => 'skipped',
+               'message' => 'Already latest stock updated.',
+            ];
+         } else {
+            $importedCount++;
+            $outlets[] = [
+               'acctno' => $acctno,
+               'status' => 'imported',
+               'message' => 'Stock CSV was downloaded from cloud and imported successfully.',
+            ];
+         }
+      }
+
+      $success = $failedCount === 0;
+
+      $message = $this->buildStockRefreshSummaryMessage($importedCount, $skippedCount, $failedCount);
+
+      return [
+         'success' => $success,
+         'message' => $message,
+         'imported_count' => $importedCount,
+         'skipped_count' => $skippedCount,
+         'failed_count' => $failedCount,
+         'outlets' => $outlets,
+      ];
+   }
+
+   private function buildStockRefreshSummaryMessage(int $imported, int $skipped, int $failed): string
+   {
+      $parts = [];
+      if ($imported > 0) {
+         $phrase = $imported.' outlet'.($imported === 1 ? '' : 's').' updated from cloud';
+         if ($skipped === 0 && $failed === 0) {
+            $phrase = 'Only '.$phrase;
+         }
+         $parts[] = $phrase;
+      }
+      if ($skipped > 0) {
+         $parts[] = $skipped.' outlet'.($skipped === 1 ? '' : 's').' already had the latest data (skipped)';
+      }
+      if ($failed > 0) {
+         $parts[] = $failed.' outlet'.($failed === 1 ? '' : 's').' could not be updated';
+      }
+
+      if ($parts === []) {
+         return 'No outlets were processed.';
+      }
+
+      return implode('; ', $parts).'.';
+   }
+
+   /**
+    * Stock CSV names from the desktop use the outlet id at the start of the basename, e.g. c2642_NAME.csv or 2642_NAME.csv.
+    */
+   private function isStockCsvFilenameForOutlet(string $filename, int $acctno): bool
+   {
+      $base = pathinfo($filename, PATHINFO_FILENAME);
+
+      return (bool) preg_match('/^(c)?' . preg_quote((string) $acctno, '/') . '_/i', $base);
    }
 
    /**

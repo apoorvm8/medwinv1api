@@ -39,6 +39,8 @@ Route::group(['prefix' => 'customer'], function() {
     Route::get('/backup', [CustomersController::class, 'backup'])->name('customer.backup');
     Route::get('/stock-data', [CustomersController::class, 'stockData'])->name('customer.stockdata');
     Route::get('/stock-data/table', [CustomersController::class, 'stockDataTable'])->name('customer.stockdata.table');
+    Route::get('/stock-data/file-times', [CustomersController::class, 'stockDataFileTimes'])->name('customer.stockdata.fileTimes');
+    Route::post('/stock-data/refresh', [CustomersController::class, 'stockDataRefresh'])->name('customer.stockdata.refresh');
     Route::get('/fetch-backup', [CustomersController::class, 'fetchBackup'])->name('customer.fetchbackup');
     Route::get('/file-download/{fileId}', [CustomersController::class, 'fileDownload']);
     Route::get('/change-password', [CustomersController::class, 'changePassword'])->name('customer.changepassword');
