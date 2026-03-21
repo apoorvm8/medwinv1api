@@ -121,7 +121,7 @@ class CustomerStockAccessService
          ->values();
 
       if ($csvFiles->isEmpty()) {
-         return ['success' => false, 'message' => 'No stock CSV file found for outlet '.$acctno.' (expected filename starting with c'.$acctno.'_ or '.$acctno.'_).'];
+         return ['success' => false, 'message' => 'No stock CSV file found for outlet '.$acctno.'.'];
       }
 
       if ($csvFiles->count() > 1) {

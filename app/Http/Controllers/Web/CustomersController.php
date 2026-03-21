@@ -43,6 +43,26 @@ class CustomersController extends Controller
     }
 
     /**
+     * AJAX: whether the logged-in customer may use backup or stock (dashboard cards).
+     */
+    public function accessCheck(string $service)
+    {
+        if (! in_array($service, ['backup', 'stock'], true)) {
+            return response()->json(['allowed' => false], Response::HTTP_BAD_REQUEST);
+        }
+
+        $acctno = Auth::guard('customer')->user()->acctno;
+
+        if ($service === 'backup') {
+            $allowed = CustomerBackup::where('acctno', $acctno)->where('active', 1)->exists();
+        } else {
+            $allowed = CustomerStockAccess::where('acctno', $acctno)->where('active', 1)->exists();
+        }
+
+        return response()->json(['allowed' => $allowed]);
+    }
+
+    /**
      * @desc Method to return the view related to changing the password
      */
     public function changePassword() {

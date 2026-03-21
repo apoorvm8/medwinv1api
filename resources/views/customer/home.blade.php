@@ -53,7 +53,7 @@
         <div class="row">
             <div class="col-lg-3 col-6">
                 <div class="small-box bg-info">
-                  <a href="{{route('customer.backup')}}" class="small-box-footer" style="text-decoration: none; color:white;">
+                  <a href="{{ route('customer.backup') }}" class="small-box-footer dashboard-service-link" data-service="backup" style="text-decoration: none; color:white;">
                     <div class="text-center inner customCardBox">
                       <h1 class="h3 d-none d-md-block mt-1" style="font-weight:300;">Backup</h1>
                       <h5 class="d-block d-md-none" style="font-size: 1.1rem;font-weight:400;">Backup</h5>
@@ -67,7 +67,7 @@
             </div>
             <div class="col-lg-3 col-6">
                 <div class="small-box bg-warning">
-                  <a href="{{route('customer.stockdata')}}" class="small-box-footer" style="text-decoration: none; color:white !important;">
+                  <a href="{{ route('customer.stockdata') }}" class="small-box-footer dashboard-service-link" data-service="stock" style="text-decoration: none; color:white !important;">
                     <div class="text-center inner customCardBox">
                       <h1 class="h3 d-none d-md-block mt-1" style="font-weight:300;">Stock Data</h1>
                       <h5 class="d-block d-md-none" style="font-size: 1.1rem;font-weight:400;">Stock Data</h5>
@@ -86,4 +86,35 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  @endsection
+@endsection
+
+@section('scripts')
+<script>
+$(function () {
+    var accessCheckBase = '{{ url('/customer/access-check') }}';
+    $('.dashboard-service-link').on('click', function (e) {
+        e.preventDefault();
+        var $a = $(this);
+        var service = $a.data('service');
+        var targetUrl = $a.attr('href');
+        $.ajax({
+            url: accessCheckBase + '/' + encodeURIComponent(service),
+            type: 'GET',
+            success: function (res) {
+                if (res && res.allowed === true) {
+                    window.location.href = targetUrl;
+                    return;
+                }
+                var msg = service === 'stock'
+                    ? 'You do not have access to the stock data service, please contact admin.'
+                    : 'You do not have access to the backup service, please contact admin.';
+                showWarningModal(msg);
+            },
+            error: function () {
+                showWarningModal('Unable to verify access. Please try again.');
+            }
+        });
+    });
+});
+</script>
+@endsection
