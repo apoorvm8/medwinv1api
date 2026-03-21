@@ -43,6 +43,26 @@ class CustomersController extends Controller
     }
 
     /**
+     * AJAX: whether the logged-in customer may use backup or stock (dashboard cards).
+     */
+    public function accessCheck(string $service)
+    {
+        if (! in_array($service, ['backup', 'stock'], true)) {
+            return response()->json(['allowed' => false], Response::HTTP_BAD_REQUEST);
+        }
+
+        $acctno = Auth::guard('customer')->user()->acctno;
+
+        if ($service === 'backup') {
+            $allowed = CustomerBackup::where('acctno', $acctno)->where('active', 1)->exists();
+        } else {
+            $allowed = CustomerStockAccess::where('acctno', $acctno)->where('active', 1)->exists();
+        }
+
+        return response()->json(['allowed' => $allowed]);
+    }
+
+    /**
      * @desc Method to return the view related to changing the password
      */
     public function changePassword() {
@@ -81,10 +101,51 @@ class CustomersController extends Controller
             $outletOptions[] = ['value' => (string) $id, 'label' => $name . ' (' . $id . ')'];
         }
         $outletOptions[] = ['value' => 'all', 'label' => 'All'];
+        $fileLastUpdatedByOutlet = $this->stockFileLastUpdatedMapForCustomer($acctnos);
+
         return view('customer.stockdata', [
             'outletOptions' => $outletOptions,
             'defaultOutlet' => (string) $acctno,
+            'fileLastUpdatedByOutlet' => $fileLastUpdatedByOutlet,
         ]);
+    }
+
+    /**
+     * JSON map of outlet acctno → formatted last_modified_at (cloud file time) for the stock data page.
+     */
+    public function stockDataFileTimes()
+    {
+        $customerStockAccess = CustomerStockAccess::where('acctno', Auth::guard('customer')->user()->acctno)->where('active', 1)->first();
+        if (! $customerStockAccess) {
+            return response()->json(['message' => 'Stock access is not enabled.'], Response::HTTP_FORBIDDEN);
+        }
+
+        $user = Auth::guard('customer')->user();
+        $acctno = $user->acctno;
+        $linked = $user->linked_outlet_ids ? array_map('trim', explode(',', $user->linked_outlet_ids)) : [];
+        $linked = array_filter($linked);
+        $acctnos = array_values(array_unique(array_merge([$acctno], $linked)));
+
+        return response()->json([
+            'file_times' => $this->stockFileLastUpdatedMapForCustomer($acctnos),
+        ]);
+    }
+
+    /**
+     * @param  array<int>  $acctnos
+     * @return array<string, string|null> keyed by acctno string; value is display datetime or null if never imported
+     */
+    private function stockFileLastUpdatedMapForCustomer(array $acctnos): array
+    {
+        $map = [];
+        $rows = CustomerStockAccess::whereIn('acctno', $acctnos)->where('active', 1)->get(['acctno', 'last_modified_at']);
+        foreach ($rows as $row) {
+            $map[(string) $row->acctno] = $row->last_modified_at
+                ? $row->last_modified_at->format('d/m/Y H:i')
+                : null;
+        }
+
+        return $map;
     }
 
     /**
@@ -109,6 +170,34 @@ class CustomersController extends Controller
             return response()->json([], Response::HTTP_FORBIDDEN);
         }
         return app(CustomerStockAccessService::class)->getStockDataDataTable($outlet);
+    }
+
+    /**
+     * Refresh stock from S3 for all outlets (main + linked). Logic lives in CustomerStockAccessService.
+     */
+    public function stockDataRefresh()
+    {
+        $customerStockAccess = CustomerStockAccess::where('acctno', Auth::guard('customer')->user()->acctno)->where('active', 1)->first();
+        if (!$customerStockAccess) {
+            return response()->json(['success' => false, 'message' => 'Stock access is not enabled.'], Response::HTTP_FORBIDDEN);
+        }
+
+        $user = Auth::guard('customer')->user();
+        $acctno = $user->acctno;
+        $linked = $user->linked_outlet_ids ? array_map('trim', explode(',', $user->linked_outlet_ids)) : [];
+        $linked = array_filter($linked);
+        $allowed = array_values(array_unique(array_merge([(string) $acctno], array_map('strval', $linked))));
+
+        $result = app(CustomerStockAccessService::class)->refreshStockForAllOutlets($allowed);
+
+        $namesByAcctno = CustomerData::whereIn('acctno', $allowed)->pluck('subdesc', 'acctno');
+        foreach ($result['outlets'] as $key => $row) {
+            $acctno = $row['acctno'];
+            $result['outlets'][$key]['outlet_name'] = $namesByAcctno->get($acctno)
+                ?? $namesByAcctno->get((string) $acctno);
+        }
+
+        return response()->json($result);
     }
 
     public function fetchBackup(Request $request) {

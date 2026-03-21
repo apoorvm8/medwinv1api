@@ -35,27 +35,37 @@ Route::get('/admin', function() {
 Route::group(['prefix' => 'customer'], function() {
     Route::post('/login', [CustomerLoginController::class, 'login'])->name('customer.login');
     Route::get('/', [CustomersController::class, 'dashboard'])->name('customer.dashboard');
+    Route::get('/access-check/{service}', [CustomersController::class, 'accessCheck'])
+        ->where('service', 'backup|stock')
+        ->name('customer.accessCheck');
     Route::post('/logout', [CustomerLoginController::class, 'logout'])->name('customer.logout');
     Route::get('/backup', [CustomersController::class, 'backup'])->name('customer.backup');
     Route::get('/stock-data', [CustomersController::class, 'stockData'])->name('customer.stockdata');
     Route::get('/stock-data/table', [CustomersController::class, 'stockDataTable'])->name('customer.stockdata.table');
+    Route::get('/stock-data/file-times', [CustomersController::class, 'stockDataFileTimes'])->name('customer.stockdata.fileTimes');
+    Route::post('/stock-data/refresh', [CustomersController::class, 'stockDataRefresh'])->name('customer.stockdata.refresh');
     Route::get('/fetch-backup', [CustomersController::class, 'fetchBackup'])->name('customer.fetchbackup');
     Route::get('/file-download/{fileId}', [CustomersController::class, 'fileDownload']);
     Route::get('/change-password', [CustomersController::class, 'changePassword'])->name('customer.changepassword');
     Route::put('/update-password', [CustomersController::class, 'updatePassword'])->name('customer.updatepassword');
 });
 
-Route::get('/', [PagesController::class, 'index'])->name('index');
-Route::get('/contact', [PagesController::class, 'contact'])->name('contact');
-Route::get('/terms_and_conditions', [PagesController::class, 'terms_and_condition'])->name('terms_and_conditions');
-Route::get('retail/pharma', [PagesController::class, 'retail_pharma'])->name('pharmacy');
-Route::get('retail/bookstore', [PagesController::class, 'retail_bookstore'])->name('bookstore');
-Route::get('retail/footwear', [PagesController::class, 'retail_footwear'])->name('footwear');
-Route::get('retail/departmental', [PagesController::class, 'retail_departmental'])->name('departmental');
-Route::get('/downloads', [PagesController::class, 'downloads'])->name('downloads');
-Route::get('/file_download/{fileId}', [PagesController::class, 'file_download'])->name('pages.download');
-//Route::get('/file_download_all', 'PagesController@file_download_all')->name('pages.download.all');
-Route::get('getFiles', [PagesController::class, 'getFiles'])->name('pages.getFiles');
-// Function to download file by software
-Route::get('/fileDownloadByName/{fileName}', [PagesController::class, 'fileDownloadByName']);
-Route::post('/contact', [CustomerMsgController::class,'store'])->name('customer.msg.submit');
+/*
+| Public marketing / guest routes — logged-in customers are sent to the customer dashboard.
+*/
+Route::middleware('redirect_if_customer')->group(function () {
+    Route::get('/', [PagesController::class, 'index'])->name('index');
+    Route::get('/contact', [PagesController::class, 'contact'])->name('contact');
+    Route::get('/terms_and_conditions', [PagesController::class, 'terms_and_condition'])->name('terms_and_conditions');
+    Route::get('retail/pharma', [PagesController::class, 'retail_pharma'])->name('pharmacy');
+    Route::get('retail/bookstore', [PagesController::class, 'retail_bookstore'])->name('bookstore');
+    Route::get('retail/footwear', [PagesController::class, 'retail_footwear'])->name('footwear');
+    Route::get('retail/departmental', [PagesController::class, 'retail_departmental'])->name('departmental');
+    Route::get('/downloads', [PagesController::class, 'downloads'])->name('downloads');
+    Route::get('/file_download/{fileId}', [PagesController::class, 'file_download'])->name('pages.download');
+    //Route::get('/file_download_all', 'PagesController@file_download_all')->name('pages.download.all');
+    Route::get('getFiles', [PagesController::class, 'getFiles'])->name('pages.getFiles');
+    // Function to download file by software
+    Route::get('/fileDownloadByName/{fileName}', [PagesController::class, 'fileDownloadByName']);
+    Route::post('/contact', [CustomerMsgController::class, 'store'])->name('customer.msg.submit');
+});

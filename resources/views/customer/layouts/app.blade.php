@@ -51,6 +51,8 @@
     @yield('content')
   {{-- End of Content --}}
 
+  @include('customer.inc.warning_modal')
+
   <footer class="main-footer">
     <strong>For Any Queries, Contact Admin: +91-9212705931 (Mr.Shrawan Jaiswal)</strong>
     <br>
@@ -80,6 +82,12 @@
 </script>
 <!-- Bootstrap 4 -->
 <script src="{{asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<script>
+  function showWarningModal(message) {
+    $('#warning_modal_body').text(message);
+    $('#warning_modal').modal('show');
+  }
+</script>
 <!-- ChartJS -->
 <script src="{{asset('adminlte/plugins/chart.js/Chart.min.js')}}"></script>
 <!-- Sparkline -->
