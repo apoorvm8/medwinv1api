@@ -352,6 +352,7 @@ class CustomerStockAccessService
    /**
     * Return Yajra DataTables response for stock_view_data filtered by outlet(s).
     * $acctnoOrAcctnos: single acctno (int|string) or array of acctnos for "All".
+    * Rows with BatchQty not greater than zero (including null) are omitted.
     */
    public function getStockDataDataTable($acctnoOrAcctnos)
    {
@@ -362,6 +363,8 @@ class CustomerStockAccessService
       } else {
          $query->where('Outlet_Id', $acctnoOrAcctnos);
       }
+
+      $query->where('BatchQty', '>', 0);
 
       return DataTables::of($query)
          ->addIndexColumn()
