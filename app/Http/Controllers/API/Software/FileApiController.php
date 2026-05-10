@@ -610,6 +610,35 @@ class FileApiController extends Controller
         if($outlet->activestatus == "N")
             return response(['success' => false, 'msg' => 'Outlet Customer is locked'], Response::HTTP_BAD_REQUEST);
 
+        // AMC expiry check for logged-in customer and outlet account.
+        $today = Carbon::now()->format('Y-m-d');
+        $customerAmcExpired = !$customer->nextamcdate || Carbon::parse($customer->nextamcdate)->lt($today);
+        $outletAmcExpired = !$outlet->nextamcdate || Carbon::parse($outlet->nextamcdate)->lt($today);
+
+        if($customerAmcExpired || $outletAmcExpired) {
+            $customerExpiryDate = $customer->nextamcdate ? Carbon::parse($customer->nextamcdate)->format('d/m/Y') : 'N/A';
+            $outletExpiryDate = $outlet->nextamcdate ? Carbon::parse($outlet->nextamcdate)->format('d/m/Y') : 'N/A';
+
+            if($customerAmcExpired && $outletAmcExpired) {
+                return response([
+                    'success' => false,
+                    'msg' => "Stock view amc date for cust ID : $cuserid has expired on ($customerExpiryDate), cust ID : $outletid has expired on ($outletExpiryDate). Please renew both."
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
+            if($customerAmcExpired) {
+                return response([
+                    'success' => false,
+                    'msg' => "Stock view amc date for cust ID : $cuserid has expired on ($customerExpiryDate). Please renew."
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
+            return response([
+                'success' => false,
+                'msg' => "Stock view amc date for cust ID : $outletid has expired on ($outletExpiryDate). Please renew."
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         $customerStockAllowed = CustomerStockAccess::where('acctno', $cuserid)->where('active', 1)->first();
         $outletStockAllowed = CustomerStockAccess::where('acctno', $outletid)->where('active', 1)->first();
 

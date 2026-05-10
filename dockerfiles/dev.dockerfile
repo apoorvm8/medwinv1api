@@ -46,11 +46,11 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
 
-# Xdebug config: connect to IDE on host
+# Xdebug config: only trigger when explicitly requested
 RUN echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.client_port=9003" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    && echo "xdebug.start_with_request=trigger" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 # Allow uploads up to 100MB and long-running requests (match nginx timeouts)
 RUN echo "upload_max_filesize=100M" >> /usr/local/etc/php/conf.d/uploads.ini \
