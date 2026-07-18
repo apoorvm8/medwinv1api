@@ -1,120 +1,75 @@
 @extends('layouts.app')
 
 @section('content')
+@php
+    $product = [
+        "eyebrow" => "Departmental store software",
+        "title" => "Practical billing and inventory for busy stores.",
+        "intro" => "Keep barcode billing, purchases, returns, stock, sales, profit reports, GST reports and accounting together in one practical system.",
+        "contactType" => "retailSupermarket",
+        "screenLabel" => "Departmental store billing",
+        "image" => "assets/img/grocery_soft0.jpg",
+        "imageAlt" => "Medwin departmental store billing software screen",
+        "imageTitle" => "Medwin Departmental Store Software billing screen",
+        "lightbox" => "departmental_bill",
+        "imageApproved" => false,
+        "preview" => [
+            "eyebrow" => "Counter sale",
+            "title" => "Departmental store billing",
+            "columns" => ["Code", "Item", "Qty", "Amount"],
+            "rows" => [
+                ["1042", "Premium Basmati Rice", "2", "₹1,190"],
+                ["2218", "Cooking Oil 1 L", "3", "₹510"],
+                ["3145", "Toor Dal 1 kg", "2", "₹390"],
+                ["4902", "Household Cleaner", "5", "₹645"],
+            ],
+            "totalLabel" => "Bill total",
+            "totalValue" => "₹2,735",
+        ],
+        "capabilityTitle" => "Keep the counter moving and the numbers organised.",
+        "capabilityIntro" => "Bring daily billing, stock movements and business reports into a clear working flow.",
+        "capabilities" => [
+            [
+                "icon" => "fas fa-barcode",
+                "title" => "Barcode billing",
+                "description" => "Search products and create bills quickly with barcode support at the counter.",
+            ],
+            [
+                "icon" => "fas fa-exchange-alt",
+                "title" => "Purchases and returns",
+                "description" => "Record purchases and keep sales returns and purchase returns properly accounted for.",
+            ],
+            [
+                "icon" => "fas fa-boxes",
+                "title" => "Stock reporting",
+                "description" => "Review stock, sales and purchase reports to understand everyday movement.",
+            ],
+            [
+                "icon" => "fas fa-chart-pie",
+                "title" => "Profit, GST and accounts",
+                "description" => "Use profit reports, GST reports and accounting records to review the business.",
+            ],
+        ],
+        "processTitle" => "Keep daily store operations connected.",
+        "processIntro" => "Follow each item through purchase, stock and sale without losing sight of the details.",
+        "process" => [
+            [
+                "title" => "Record inward stock",
+                "description" => "Enter purchases and update the stock records used by your team.",
+            ],
+            [
+                "title" => "Bill at the counter",
+                "description" => "Use barcode search to find products and complete customer bills efficiently.",
+            ],
+            [
+                "title" => "Review performance",
+                "description" => "Check stock, sales, purchase and profit reports with GST and accounting records.",
+            ],
+        ],
+        "ctaTitle" => "See how Medwin fits your store.",
+        "ctaText" => "Tell us about your counter, stock and reporting needs. Our team will contact you to discuss your requirements.",
+    ];
+@endphp
 
-{{-- Section Area --}}
-<section class="section-1 px-3 px-md-0">
-    <div class="container">
-        <h1 class="text-center mt-5">Departmental Software</h1>
-        <div class="col-sm-12 mt-4">
-            <p class="lead secondary-color">
-                All purpose retail and wholesale software. Easy invoicing, Purchase entry,
-                Purchase return, Sale return. All Sale, Stock and Purchase reports available. Profit report,
-                Stock and Sales statement. SMS notification, Barcode search, Accounting, GST reports are all available.
-            </p>
-        </div>
-    </div>
-</section>
-
-<!-- Section: Features of Softwares  -->
-<section class="text-center text-md-left section-2 py-3 px-3 px-md-0">
-    <div class="container">
-        <h1 class="text-center">Features</h1>
-        <div class="row mt-4">
-            <div class="col-sm-12 col-md-6 col-lg-3">
-                <div class="py-3">
-                    <a href="{{asset('assets/img/grocery_soft0.jpg')}}" data-lightbox="departmental_bill"
-                        data-title="Image">
-                        <img src="{{asset('assets/img/grocery_soft0.jpg')}}" class="departmental-bill" height="120"
-                            width="120">
-                    </a>
-                </div>
-                <div>
-                    <p class="lead">Easy Billing</p>
-                    <p>A very simple, to the point billing approach. Anybody can make and print bills easily</p>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-3 ">
-                <div class="py-3">
-                    <img src="{{asset('assets/img/features/stock_logo0.png')}}" class="img-responsive" height="80"
-                        width="80">
-                </div>
-                <div>
-                    <p class="lead">Stock Management</p>
-                    <p>Stock inventory is very efficiently maintained in Medwin Softwares. All kinds of stock ledgers
-                        are readily availble.</p>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-3 ">
-                <div class="py-3">
-                    <img src="{{asset('assets/img/features/import_logo0.jpg')}}" class="img-responsive" height="80"
-                        width="80">
-                </div>
-                <div>
-                    <p class="lead">Import Purchase</p>
-                    <p>Purchases can be imported easily. With a single click purchase data gets generated in no time.
-                    </p>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-3 ">
-                <div class="py-3">
-                    <img src="{{asset('assets/img/features/sale_report_logo0.png')}}" class="img-responsive" height="80"
-                        width="80">
-                </div>
-                <div>
-                    <p class="lead">Sale, Purchase Report</p>
-                    <p>All kinds of sale and purchase reports are available. Daily sale, Daily purchase, Company wise
-                        sale, Company wise purchase, Profit wise report etc are available.</p>
-                </div>
-            </div>
-        </div>
-        <div class="row mt-5">
-            <div class="col-sm-12 col-md-6 col-lg-3 ">
-                <div class="py-3">
-                    <img src="{{asset('assets/img/features/gst_logo0.png')}}" class="img-responsive" height="80"
-                        width="80">
-                </div>
-                <div>
-                    <p class="lead">GST Reports</p>
-                    <p class="card-text">GSTR1, GSTR2, GSTR3B, B2B, B2CS, HSN wise reports are available. Also offline
-                        CSV and excel formats for GSTR1 are available.</p>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-3 ">
-                <div class="py-3">
-                    <img src="{{asset('assets/img/features/accounting_logo0.png')}}" class="img-responsive" height="80"
-                        width="80">
-                </div>
-                <div>
-                    <p class="lead">Accounting</p>
-                    <p class="card-text">Ledger, Sundry Debtors, Sundry Credtors, Trial balance, Double voucher entry,
-                        Cash deposit, Sale receipt, Purchase receipt etc are available.</p>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-3 ">
-                <div class="py-3">
-                    <img src="{{asset('assets/img/features/stock_report_logo0.jpg')}}" class="img-responsive"
-                        height="80" width="80">
-                </div>
-                <div>
-                    <p class="lead">Stock Reports</p>
-                    <p>Depending upon the analysis of sold data or limit set for any item, orders can be generated
-                        efficiently.</p>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-3 ">
-                <div class="py-3">
-                    <img src="{{asset('assets/img/features/notification_logo0.png')}}" class="img-responsive"
-                        height="80" width="80">
-                </div>
-                <div>
-                    <p class="lead">Easy Billing</p>
-                    <p>Instant notifications can be sent to customers through SMS facility provided by Medwin Softwares
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
+@include('inc.product-page', ['product' => $product])
 @endsection

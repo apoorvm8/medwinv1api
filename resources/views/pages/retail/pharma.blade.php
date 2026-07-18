@@ -1,129 +1,122 @@
 @extends('layouts.app')
 
 @section('content')
+@php
+    $isWholesale = request()->query('segment') === 'wholesale';
 
-{{-- Section Area --}}
-<section class="text-left section-1 mt-5 px-2 px-md-0">
-    <div class="container">
-        <h1 class="text-center">Pharmacy Software</h1>
-        <div class="col-sm-12 mt-4">
-            <p class="lead secondary-color">
-                This software provides easy invoicing, purchase entry, purchase import, Batchwise stock report,
-                Expiry list, Sales return, Purchase return, Order management. Also includes accounting with all
-                features and GST reports. SMS notifications and barcode billing.
-            </p>
-        </div>
-    </div>
-</section>
+    if ($isWholesale) {
+        $product = [
+            "eyebrow" => "Wholesale pharmacy software",
+            "title" => "Wholesale pharmacy software for sales, stock and distribution.",
+            "intro" => "Manage supplier purchases, customer orders, batch-wise inventory, expiry, GST billing and trade accounts from one connected system.",
+            "contactType" => "wholeSalePharma",
+            "screenLabel" => "Wholesale pharmacy sales",
+            "image" => "assets/img/pharmacy-wholesale-sale-screen.png",
+            "imageAlt" => "Medwin wholesale pharmacy sales and stock software screen",
+            "imageTitle" => "Medwin Wholesale Pharmacy Software sales screen",
+            "lightbox" => "wholesale_pharmacy_sale",
+            "imageApproved" => true,
+            "imageFit" => "contain",
+            "capabilityTitle" => "Control every wholesale movement from purchase to dispatch.",
+            "capabilityIntro" => "Keep trade rates, large inventories and customer transactions organised for daily wholesale work.",
+            "capabilities" => [
+                [
+                    "icon" => "fas fa-file-invoice-dollar",
+                    "title" => "Wholesale sales billing",
+                    "description" => "Create trade invoices with item rates, quantities, discounts, GST and customer details.",
+                ],
+                [
+                    "icon" => "fas fa-boxes",
+                    "title" => "Batch-wise inventory",
+                    "description" => "Track medicine stock, batches and expiry across purchases, orders and wholesale sales.",
+                ],
+                [
+                    "icon" => "fas fa-truck-loading",
+                    "title" => "Supplier purchases",
+                    "description" => "Record supplier bills, purchase returns and changing rates with complete item details.",
+                ],
+                [
+                    "icon" => "fas fa-chart-line",
+                    "title" => "Trade accounts and reports",
+                    "description" => "Review customer balances, sales, stock, GST and profit information in one place.",
+                ],
+            ],
+            "processTitle" => "Move smoothly from supplier purchase to customer dispatch.",
+            "processIntro" => "Keep purchasing, order fulfilment, billing and wholesale reporting connected.",
+            "process" => [
+                [
+                    "title" => "Record supplier purchases",
+                    "description" => "Capture supplier, batch, expiry, quantity, rate and GST details when stock arrives.",
+                ],
+                [
+                    "title" => "Manage stock and orders",
+                    "description" => "Check available inventory and prepare customer orders with the right trade rates.",
+                ],
+                [
+                    "title" => "Bill, dispatch and review",
+                    "description" => "Complete wholesale invoices and review customer, stock and business reports.",
+                ],
+            ],
+            "ctaTitle" => "See how Medwin fits your wholesale pharmacy.",
+            "ctaText" => "Tell us about your suppliers, customer orders and stock workflow. Our team will contact you to discuss your requirements.",
+        ];
+    } else {
+        $product = [
+            "eyebrow" => "Retail pharmacy software",
+            "title" => "Retail pharmacy software for faster billing and stock control.",
+            "intro" => "Manage counter sales, batch-wise medicine stock, expiry, purchases, returns, GST reports and accounts from one practical system.",
+            "contactType" => "retailPharma",
+            "screenLabel" => "Retail pharmacy billing",
+            "image" => "assets/img/pharmacy_soft0.jpg",
+            "imageAlt" => "Medwin retail pharmacy billing software screen",
+            "imageTitle" => "Medwin Retail Pharmacy Software billing screen",
+            "lightbox" => "bill",
+            "imageApproved" => true,
+            "capabilityTitle" => "Keep your retail counter and medicine stock working together.",
+            "capabilityIntro" => "Give your team quick access to billing, batch, expiry and inventory details throughout the day.",
+            "capabilities" => [
+                [
+                    "icon" => "fas fa-cash-register",
+                    "title" => "Faster counter billing",
+                    "description" => "Create and print customer bills with barcode support, MRP, GST and discounts.",
+                ],
+                [
+                    "icon" => "fas fa-boxes",
+                    "title" => "Batch and expiry tracking",
+                    "description" => "Keep batch-wise medicine stock and expiry details visible while buying and selling.",
+                ],
+                [
+                    "icon" => "fas fa-file-import",
+                    "title" => "Purchases and returns",
+                    "description" => "Record purchases, import purchase data and handle sales or purchase returns.",
+                ],
+                [
+                    "icon" => "fas fa-calculator",
+                    "title" => "GST and retail accounts",
+                    "description" => "Review GST reports alongside ledgers, debtors, creditors and trial balance.",
+                ],
+            ],
+            "processTitle" => "Connect inward stock with every customer bill.",
+            "processIntro" => "Follow medicines from purchase entry through counter sales and daily reporting.",
+            "process" => [
+                [
+                    "title" => "Receive medicine stock",
+                    "description" => "Enter or import purchases with the relevant batch, expiry, quantity and rate details.",
+                ],
+                [
+                    "title" => "Monitor batches and expiry",
+                    "description" => "Use stock ledgers and expiry lists to keep the right medicines available.",
+                ],
+                [
+                    "title" => "Bill customers and review",
+                    "description" => "Complete counter bills and review daily sales, purchases and profit reports.",
+                ],
+            ],
+            "ctaTitle" => "See Medwin working at your retail pharmacy.",
+            "ctaText" => "Tell us about your counter billing and medicine stock workflow. Our team will contact you to discuss your requirements.",
+        ];
+    }
+@endphp
 
-<!-- Section: Features of Softwares  -->
-<section class="text-center text-md-left section-2 py-3 px-3 px-md-0">
-    <div class="container">
-        <h1 class="text-center mt-2">Features</h1>
-        <div class="row mt-5">
-            <div class="col-sm-12 col-md-6 col-lg-3">
-                <div class="py-3">
-                    <a href="/assets/img/pharmacy_soft0.jpg" data-lightbox="bill" data-title="Image">
-                        <img src="{{asset('assets/img/pharmacy_soft0.jpg')}}" class="pharma-bill" height="120"
-                            width="120">
-                    </a>
-                </div>
-                <div>
-                    <p class="lead">Easy Billing</p>
-                    <p class="secondary-color">A very simple, to the point billing approach. Anybody can make and print
-                        bills easily</p>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-3 ">
-                <div class="py-3">
-                    <img src="{{asset('assets/img/features/stock_logo0.png')}}" class="img-responsive" height="80"
-                        width="80">
-                </div>
-                <div>
-                    <p class="lead">Stock Management</p>
-                    <p class="secondary-color">Stock inventory is very efficiently maintained in Medwin Softwares. All
-                        kinds of stock ledgers
-                        are readily availble.</p>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-3 ">
-                <div class="py-3">
-                    <img src="{{asset('assets/img/features/import_logo0.jpg')}}" class="img-responsive" height="80"
-                        width="80">
-                </div>
-                <div>
-                    <p class="lead">Import Purchase</p>
-                    <p class="secondary-color">Purchases can be imported easily. With a single click purchase data gets
-                        generated in no time.
-                    </p>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-3 ">
-                <div class="py-3">
-                    <img src="{{asset('assets/img/features/sale_report_logo0.png')}}" class="img-responsive" height="80"
-                        width="80">
-                </div>
-                <div>
-                    <p class="lead">Sale, Purchase Report</p>
-                    <p class="secondary-color">All kinds of sale and purchase reports are available. Daily sale, Daily
-                        purchase, Company wise
-                        sale, Company wise purchase, Profit wise report etc are available.</p>
-                </div>
-            </div>
-        </div>
-        <div class="row mt-5">
-            <div class="col-sm-12 col-md-6 col-lg-3 ">
-                <div class="py-3">
-                    <img src="{{asset('assets/img/features/gst_logo0.png')}}" class="img-responsive" height="80"
-                        width="80">
-                </div>
-                <div>
-                    <p class="lead">GST Reports</p>
-                    <p class="secondary-color">GSTR1, GSTR2, GSTR3B, B2B, B2CS, HSN wise reports are available. Also
-                        offline
-                        CSV and excel formats for GSTR1 are available.</p>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-3 ">
-                <div class="py-3">
-                    <img src="{{asset('assets/img/features/accounting_logo0.png')}}" class="img-responsive" height="80"
-                        width="80">
-                </div>
-                <div>
-                    <p class="lead">Accounting</p>
-                    <p class="secondary-color">Ledger, Sundry Debtors, Sundry Credtors, Trial balance, Double voucher
-                        entry,
-                        Cash deposit, Sale receipt, Purchase receipt etc are available.</p>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-3 ">
-                <div class="py-3">
-                    <img src="{{asset('assets/img/features/stock_report_logo0.jpg')}}" class="img-responsive"
-                        height="80" width="80">
-                </div>
-                <div>
-                    <p class="lead">Stock Reports</p>
-                    <p class="secondary-color">Depending upon the analysis of sold data or limit set for any item,
-                        orders
-                        can be generated
-                        efficiently.</p>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-3 ">
-                <div class="py-3">
-                    <img src="{{asset('assets/img/features/notification_logo0.png')}}" class="img-responsive"
-                        height="80" width="80">
-                </div>
-                <div>
-                    <p class="lead">Easy Billing</p>
-                    <p class="secondary-color">Instant notifications can be sent to customers through SMS facility
-                        provided by Medwin Softwares
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-
+@include('inc.product-page', ['product' => $product])
 @endsection
