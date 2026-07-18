@@ -16,6 +16,7 @@ class PublicMarketingPagesTest extends TestCase
             ->assertSee('Inventory and Accounts')
             ->assertSee('Made Simple.')
             ->assertSee('1,500+ satisfied customers')
+            ->assertSee('Mr. Shrawan Jaiswal')
             ->assertSee('id="solutions"', false)
             ->assertSee('id="features"', false)
             ->assertSee('id="contact"', false)

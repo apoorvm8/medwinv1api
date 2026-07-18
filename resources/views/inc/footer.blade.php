@@ -41,7 +41,10 @@
                 <ul class="list-unstyled footer-contact">
                     <li>
                         <i class="fas fa-phone-alt" aria-hidden="true"></i>
-                        <a href="tel:+919212705931">+91 92127 05931</a>
+                        <span class="footer-contact__person">
+                            <strong>Mr. Shrawan Jaiswal</strong>
+                            <a href="tel:+919212705931">+91 92127 05931</a>
+                        </span>
                     </li>
                     <li>
                         <i class="far fa-envelope" aria-hidden="true"></i>

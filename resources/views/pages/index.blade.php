@@ -361,7 +361,7 @@
                             <div class="contact-direct">
                                 <a href="tel:+919212705931">
                                     <span><i class="fas fa-phone-alt" aria-hidden="true"></i></span>
-                                    <div><small>Call us</small><strong>+91 92127 05931</strong></div>
+                                    <div><small>Call Mr. Shrawan Jaiswal</small><strong>+91 92127 05931</strong></div>
                                 </a>
                                 <a href="mailto:medwinsoftware@gmail.com">
                                     <span><i class="far fa-envelope" aria-hidden="true"></i></span>
