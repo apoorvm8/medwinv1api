@@ -21,7 +21,7 @@
         <div class="d-flex align-items-center justify-content-between">
             <p class="mb-0"><i class="fas fa-map-marker-alt mr-2" aria-hidden="true"></i>Pharmacy and retail software for Indian businesses</p>
             <div class="site-topbar__links d-flex align-items-center">
-                <a href="tel:+919212705931"><i class="fas fa-phone-alt mr-2" aria-hidden="true"></i>+91 92127 05931</a>
+                <a href="tel:+919212705931"><i class="fas fa-phone-alt mr-2" aria-hidden="true"></i>Mr. Shrawan Jaiswal · +91 92127 05931</a>
                 <a href="mailto:medwinsoftware@gmail.com"><i class="far fa-envelope mr-2" aria-hidden="true"></i>medwinsoftware@gmail.com</a>
             </div>
         </div>

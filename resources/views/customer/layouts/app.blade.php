@@ -54,7 +54,7 @@
   @include('customer.inc.warning_modal')
 
   <footer class="main-footer">
-    <strong>For Any Queries, Contact Admin: +91-9212705931 (Mr.Shrawan Jaiswal)</strong>
+    <strong>For any queries, contact Mr. Shrawan Jaiswal: +91 92127 05931</strong>
     <br>
     <strong>Copyright &copy; {{date("Y")}} Medwin - Customer Dashboard.</strong>
     All rights reserved.
