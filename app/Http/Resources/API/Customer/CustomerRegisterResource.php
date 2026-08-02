@@ -9,6 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class CustomerRegisterResource extends JsonResource
 {
     use HashIds;
+
     /**
      * Transform the resource into an array.
      *
@@ -18,11 +19,13 @@ class CustomerRegisterResource extends JsonResource
     public function toArray($request)
     {
         $customerRegisters = $this->resource->toArray();
-        foreach($customerRegisters["data"] as $key => $customerRegister) {
-            $customerRegister["id"] = $this->encode($customerRegister);
-            $customerRegister["datetimereg"] = $customerRegister["datetimereg"] ? Carbon::parse($customerRegister["datetimereg"])->format('d/m/Y, g:i A') : null;
-            $customerRegisters["data"][$key] = $customerRegister;
+        foreach ($customerRegisters['data'] as $key => $customerRegister) {
+            $customerRegister['id'] = $this->encode($customerRegister);
+            $customerRegister['datetimereg'] = $customerRegister['datetimereg'] ? Carbon::parse($customerRegister['datetimereg'])->format('d/m/Y, g:i A') : null;
+            $customerRegister['next_amc_date'] = $customerRegister['next_amc_date'] ? Carbon::parse($customerRegister['next_amc_date'])->format('d/m/Y') : null;
+            $customerRegisters['data'][$key] = $customerRegister;
         }
+
         return $customerRegisters;
     }
 }

@@ -9,17 +9,18 @@ use Illuminate\Database\Eloquent\Model;
 class CustomerRegister extends Model
 {
     use HasFactory;
+
     protected $dates = ['datetimereg'];
 
-
     protected $fillable = [
-        'acctno', 'subdesc', 'datetimereg','remarks', 'created_at', 'updated_at'
+        'acctno', 'subdesc', 'datetimereg', 'remarks', 'created_at', 'updated_at',
     ];
 
     // address is combination of subadd1, subadd2, subadd3
     public const SEARCHABLE = [
         'customer_registers.acctno', 'customer_registers.subdesc',
-        'customer_registers.datetimereg', 'customer_registers.remarks'
+        'customer_registers.datetimereg', 'customer_registers.remarks',
+        'customer_data.nextamcdate',
     ];
 
     /**
