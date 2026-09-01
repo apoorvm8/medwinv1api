@@ -11,6 +11,7 @@ use App\Services\CustomerBackupService;
 use App\Services\CustomerStockAccessService;
 use App\Services\FolderService;
 use App\Traits\HashIds;
+use Carbon\Carbon;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -188,6 +189,11 @@ class CustomersController extends Controller
         $linked = array_filter($linked);
         $allowed = array_values(array_unique(array_merge([(string) $acctno], array_map('strval', $linked))));
 
+        $amcBlock = $this->stockRefreshBlockedByAmc($allowed);
+        if ($amcBlock !== null) {
+            return $amcBlock;
+        }
+
         $result = app(CustomerStockAccessService::class)->refreshStockForAllOutlets($allowed);
 
         $namesByAcctno = CustomerData::whereIn('acctno', $allowed)->pluck('subdesc', 'acctno');
@@ -257,5 +263,74 @@ class CustomersController extends Controller
              return redirect()->route('customer.dashboard');
          }
          app(FolderService::class)->downloadFile($this->encode(['id' => $id]));
-    }  
+    }
+
+    /**
+     * Same AMC rule as download-customer-stock: valid when nextamcdate >= today (date-only).
+     *
+     * @param  array<int|string>  $allowedAcctnos  Main customer + linked outlets
+     */
+    private function stockRefreshBlockedByAmc(array $allowedAcctnos): ?\Illuminate\Http\JsonResponse
+    {
+        $today = Carbon::now()->format('Y-m-d');
+        $expired = [];
+
+        foreach ($allowedAcctnos as $id) {
+            $idInt = (int) $id;
+            $row = CustomerData::find($idInt);
+            if (! $row) {
+                $expired[] = ['acctno' => $idInt, 'date' => 'N/A'];
+
+                continue;
+            }
+            $isExpired = ! $row->nextamcdate || Carbon::parse($row->nextamcdate)->lt($today);
+            if ($isExpired) {
+                $expired[] = [
+                    'acctno' => $idInt,
+                    'date' => $row->nextamcdate ? Carbon::parse($row->nextamcdate)->format('d/m/Y') : 'N/A',
+                ];
+            }
+        }
+
+        if ($expired === []) {
+            return null;
+        }
+
+        $message = $this->buildStockViewAmcExpiredMessage($expired);
+
+        return response()->json([
+            'success' => false,
+            'message' => $message,
+            'imported_count' => 0,
+            'skipped_count' => 0,
+            'failed_count' => count($expired),
+            'outlets' => [],
+        ], Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @param  list<array{acctno: int, date: string}>  $expired
+     */
+    private function buildStockViewAmcExpiredMessage(array $expired): string
+    {
+        if (count($expired) === 1) {
+            $e = $expired[0];
+
+            return "Stock view amc date for cust ID : {$e['acctno']} has expired on ({$e['date']}). Please renew.";
+        }
+
+        if (count($expired) === 2) {
+            $a = $expired[0];
+            $b = $expired[1];
+
+            return "Stock view amc date for cust ID : {$a['acctno']} has expired on ({$a['date']}), cust ID : {$b['acctno']} has expired on ({$b['date']}). Please renew both.";
+        }
+
+        $parts = [];
+        foreach ($expired as $e) {
+            $parts[] = "cust ID : {$e['acctno']} has expired on ({$e['date']})";
+        }
+
+        return 'Stock view amc date for '.implode(', ', $parts).'. Please renew.';
+    }
 }
