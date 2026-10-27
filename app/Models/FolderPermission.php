@@ -13,7 +13,7 @@ class FolderPermission extends Model
     protected $table = 'folder_permissions';
     protected $primaryKey = 'id';
     public $timestamps = false;    
-    protected $dates = ['updated_at', 'created_at'];
+    protected $casts = ['updated_at' => 'datetime', 'created_at' => 'datetime'];
     protected $fillable = [
         'folder_id', 'user_id', 'view', 'create', 'edit', 'info', 
         'permission', 'delete', 'upload', 'download', 

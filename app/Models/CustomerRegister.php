@@ -10,7 +10,7 @@ class CustomerRegister extends Model
 {
     use HasFactory;
 
-    protected $dates = ['datetimereg'];
+    protected $casts = ['datetimereg' => 'datetime'];
 
     protected $fillable = [
         'acctno', 'subdesc', 'datetimereg', 'remarks', 'created_at', 'updated_at',

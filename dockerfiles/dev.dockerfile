@@ -1,6 +1,9 @@
 # medwinv1api/dockerfiles/dev.dockerfile
 # Dependencies (vendor) are installed via the composer utility service and bind-mounted at runtime.
-FROM php:8.1-fpm
+FROM php:8.4-fpm
+
+# deb.debian.org is very slow from here; Debian's own AWS mirror serves the same packages.
+RUN sed -i 's/deb.debian.org/cdn-aws.deb.debian.org/g' /etc/apt/sources.list.d/debian.sources
 
 # Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \

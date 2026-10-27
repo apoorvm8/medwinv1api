@@ -182,7 +182,8 @@ class CustomerStockAccessService
             }
          }
 
-         $stockAccess->last_modified_at = Carbon::createFromTimestamp($s3Lm);
+         // Carbon 3 returns UTC here unless told otherwise; stored times are in the app timezone.
+         $stockAccess->last_modified_at = Carbon::createFromTimestamp($s3Lm, config('app.timezone'));
          $stockAccess->save();
       } catch (Throwable $e) {
          report($e);
