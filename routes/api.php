@@ -47,6 +47,7 @@ Route::group(['prefix' => 'auth', 'middleware' => ['auth:sanctum']], function() 
 
 Route::group(['prefix' => 'folders', 'middleware' => ['auth:sanctum']], function () {
     Route::get('/', [FolderApiController::class, 'index'])->middleware('permission:folder_view');
+    Route::get('/browse', [FolderApiController::class, 'browse'])->middleware('permission:folder_view');
     Route::post('/', [FolderApiController::class ,'store']);
     Route::put('/{id}', [FolderApiController::class, 'edit']);
     Route::delete('/{id}', [FolderApiController::class, 'deleteFolder']);

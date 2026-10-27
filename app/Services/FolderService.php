@@ -13,6 +13,7 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -24,6 +25,10 @@ use Illuminate\Support\Str;
 class FolderService
 {
    use HashIds;
+
+   // The signed-in user's folder access, loaded once per request by access().
+   private $access = null;
+
    /**
     * @desc Function to fetch folders based on filter
     * @return array
@@ -40,6 +45,210 @@ class FolderService
       } catch (JsonException $ex) {
          throw new JsonException("Error in parsing JSON", $ex->getCode() ?: Response::HTTP_INTERNAL_SERVER_ERROR);
       }
+   }
+
+   /**
+    * @desc Function to list a folder for the folder browser. Without a search or filters this is the
+    * folder's own contents; with them it is everything below the folder that matches. Sizes and
+    * modification times come from one S3 listing (folders have neither, as in the S3 console).
+    * Only items the user may view are listed, and each one says what the user may do with it.
+    * @param array params folder, search, type, modified, from, to, area, sort, dir, page, per_page
+    * @return array
+    */
+   public function browse($params) {
+      $folder = $this->authorize(Arr::get($params, 'folder'), 'view');
+      if($folder->resource_type != FolderMaster::RESOURCE_TYPE_FOLDER) {
+         abort(Response::HTTP_NOT_FOUND, "Folder not found.");
+      }
+
+      $search = trim(Arr::get($params, 'search') ?? '');
+      $type = Arr::get($params, 'type') ?: 'all';
+      $modified = Arr::get($params, 'modified') ?: 'any';
+      $area = Arr::get($params, 'area') ?: 'all';
+      $finding = mb_strlen($search) >= 2 || $type != 'all' || $modified != 'any' || $area != 'all';
+
+      if($finding) {
+         $query = FolderMaster::where('path', 'like', $this->escapeLike($folder->path) . '/%');
+         if(mb_strlen($search) >= 2) {
+            $query->where('name', 'like', '%' . $this->escapeLike($search) . '%');
+         }
+         if($type != 'all') {
+            $query->where('resource_type', $type);
+         }
+         if($area != 'all') {
+            $query->where('resource_module', $area);
+         }
+      } else {
+         $query = FolderMaster::where('parent_id', $folder->id);
+      }
+      $rows = $query->get()->filter(fn ($row) => $this->allows($row, 'view'));
+
+      // Sizes and modification times of the files, from one listing of the folder (deep when finding).
+      $objects = [];
+      if($rows->contains('resource_type', FolderMaster::RESOURCE_TYPE_FILE)) {
+         foreach(Storage::disk('s3')->getDriver()->listContents($folder->path, $finding) as $object) {
+            if($object->isFile()) {
+               $objects[$object->path()] = $object;
+            }
+         }
+      }
+      $items = $rows->map(fn ($row) => $this->browserItem($row, $objects[$row->path] ?? null));
+
+      // Only files have a modification time, so a date filter leaves folders out.
+      if($modified != 'any') {
+         $from = [
+            'today' => now()->startOfDay(),
+            '7d' => now()->subDays(7),
+            '30d' => now()->subDays(30),
+            'custom' => Arr::get($params, 'from') ? Carbon::parse(Arr::get($params, 'from'))->startOfDay() : null,
+         ][$modified];
+         $to = $modified == 'custom' && Arr::get($params, 'to') ? Carbon::parse(Arr::get($params, 'to'))->endOfDay() : null;
+         $items = $items->filter(fn ($item) => $item['last_modified'] !== null
+            && (!$from || $item['last_modified'] >= $from->timestamp)
+            && (!$to || $item['last_modified'] <= $to->timestamp));
+      }
+
+      // Folders first, then by the chosen column; names break ties.
+      $sort = Arr::get($params, 'sort') ?: 'name';
+      $descending = Arr::get($params, 'dir') == 'desc';
+      $items = $items->sort(function ($a, $b) use ($sort, $descending) {
+         if($a['resource_type'] != $b['resource_type']) {
+            return $a['resource_type'] == FolderMaster::RESOURCE_TYPE_FOLDER ? -1 : 1;
+         }
+         $order = $sort == 'name' ? strnatcasecmp($a['name'], $b['name']) : ($a[$sort] ?? -1) <=> ($b[$sort] ?? -1);
+         return ($descending ? -$order : $order) ?: strnatcasecmp($a['name'], $b['name']);
+      });
+
+      // The folders from root down to this one: root/a/b gives root, root/a and root/a/b.
+      $segments = explode('/', $folder->path);
+      $paths = array_map(fn ($length) => implode('/', array_slice($segments, 0, $length)), range(1, count($segments)));
+      $breadcrumbs = FolderMaster::whereIn('path', $paths)->orderBy('depth')->get()
+         ->map(fn ($crumb) => ['id' => $this->encode($crumb), 'name' => $crumb->name]);
+
+      return [
+         'folder' => $this->browserItem($folder),
+         'breadcrumbs' => $breadcrumbs,
+         'finding' => $finding,
+         'total' => $items->count(),
+         'items' => $items->forPage(intval(Arr::get($params, 'page') ?: 1), intval(Arr::get($params, 'per_page') ?: 25))->values(),
+      ];
+   }
+
+   /**
+    * @desc Function to shape a folder or file for the folder browser
+    * @param FolderMaster row
+    * @param \League\Flysystem\FileAttributes object its S3 listing entry, if any
+    * @return array
+    */
+   private function browserItem(FolderMaster $row, $object = null) {
+      return [
+         'id' => $this->encode($row),
+         'parent_id' => $row->parent_id ? $this->encode($row, 'parent_id') : null,
+         'name' => $row->name,
+         'slug' => $row->slug,
+         'depth' => $row->depth,
+         'path' => $row->path,
+         'location' => Str::beforeLast($row->path, '/'),
+         'resource_type' => $row->resource_type,
+         'resource_module' => $row->resource_module,
+         'size' => $object ? $object->fileSize() : null,
+         'last_modified' => $object ? $object->lastModified() : null,
+         'downloads' => intval($row->times_downloaded),
+         'can' => array_combine(FolderMaster::PERMISSION_KEYS, array_map(fn ($action) => $this->allows($row, $action), FolderMaster::PERMISSION_KEYS)),
+      ];
+   }
+
+   private function escapeLike($value) {
+      return addcslashes($value, '%_\\');
+   }
+
+   /**
+    * @desc Function to find a folder or file by its hashed id (no id means the root folder, as in
+    * createFolder) and stop the request when the signed-in user may not do the action on it
+    * @param string id
+    * @param string action one of FolderMaster::PERMISSION_KEYS
+    * @return FolderMaster
+    */
+   public function authorize($id, $action) {
+      $folderId = null;
+      if($id) {
+         try {
+            $folderId = $this->decode($id, "Folder");
+         } catch(Exception $ex) {
+            // An id that doesn't decode (a broken link) is as missing as one that isn't in the table.
+            abort(Response::HTTP_NOT_FOUND, "Folder or file not found.");
+         }
+      }
+      $folder = $id ? FolderMaster::find($folderId) : FolderMaster::where('slug', 'root')->first();
+      if(!$folder) {
+         abort(Response::HTTP_NOT_FOUND, "Folder or file not found.");
+      }
+      // No name in the message: ids are guessable, so it would tell folder names to users who can't see them.
+      if(!$this->allows($folder, $action)) {
+         abort(Response::HTTP_FORBIDDEN, "You do not have $action permission on this folder or file.");
+      }
+      return $folder;
+   }
+
+   /**
+    * @desc Function to tell whether the signed-in user may do an action on a folder or file, by the
+    * same rules the folder screen has always followed:
+    * - everyone may open the root folder; superusers may also create, upload, download and see info there;
+    * - superusers may do anything anywhere else;
+    * - other users need the action in their folder_permissions row, and must be able to view the item
+    *   and every folder above it (the only way the folder tree ever let them reach it);
+    * - creating, editing and uploading only apply to folders.
+    * @param FolderMaster folder
+    * @param string action one of FolderMaster::PERMISSION_KEYS
+    * @return bool
+    */
+   public function allows(FolderMaster $folder, $action) {
+      if(in_array($action, ['create', 'edit', 'upload']) && $folder->resource_type != FolderMaster::RESOURCE_TYPE_FOLDER) {
+         return false;
+      }
+
+      $access = $this->access();
+      if($folder->slug == 'root') {
+         return $action == 'view' || ($access['superuser'] && in_array($action, ['create', 'upload', 'download', 'info']));
+      }
+      if($access['superuser']) {
+         return true;
+      }
+
+      $permission = $access['permissions'][$folder->id] ?? null;
+      if(!$permission || !$permission[$action]) {
+         return false;
+      }
+
+      // root/a/b needs root/a and root/a/b to be viewable.
+      $segments = explode('/', $folder->path);
+      for($length = 2; $length <= count($segments); $length++) {
+         if(!isset($access['viewablePaths'][implode('/', array_slice($segments, 0, $length))])) {
+            return false;
+         }
+      }
+      return true;
+   }
+
+   /**
+    * @desc Function to load the signed-in user's folder access once per request: whether they are a
+    * superuser, their folder_permissions rows by folder id, and the paths of the folders they may view
+    * @return array
+    */
+   private function access() {
+      if($this->access === null) {
+         $user = auth('sanctum')->user();
+         $superuser = $user->hasRole(User::SUPER_USER);
+         $permissions = $superuser ? collect() : FolderPermission::where('user_id', $user->id)->get()->keyBy('folder_id');
+
+         $this->access = [
+            'superuser' => $superuser,
+            'permissions' => $permissions,
+            'viewablePaths' => FolderMaster::whereIn('id', $permissions->filter(fn ($permission) => $permission->view)->keys())
+               ->pluck('path')->flip()->all(),
+         ];
+      }
+      return $this->access;
    }
 
    /**
@@ -600,15 +809,16 @@ class FolderService
       $path = $resource->path;
 
       if($resource->resource_type == FolderMaster::RESOURCE_TYPE_FOLDER) {
+         $files = Storage::disk('s3')->allFiles($path);
+
+         // Say so before the ZIP starts streaming, as errors can't be sent after that (and don't count it as a download).
+         if(count($files) == 0) {
+            abort(Response::HTTP_UNPROCESSABLE_ENTITY, "$resource->name is empty, there is nothing to download.");
+         }
+
          $resource->last_downloaded_at = now();
          $resource->times_downloaded = intval($resource->times_downloaded) + 1;
          $resource->save();
-         
-         $files = Storage::disk('s3')->allFiles($path);
-
-         if(count($files) == 0) {
-            throw new Exception("Folder is empty", Response::HTTP_BAD_REQUEST);
-         }
 
          header('Access-Control-Allow-Origin: *');
          header('Access-Control-Allow-Methods: *');
