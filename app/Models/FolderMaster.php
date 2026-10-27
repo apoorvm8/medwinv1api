@@ -15,7 +15,7 @@ class FolderMaster extends Model
     protected $table = 'folder_masters';
     protected $primaryKey = 'id';
     public $timestamps = false;    
-    protected $dates = ['last_downloaded_at', 'updated_at', 'created_at'];
+    protected $casts = ['last_downloaded_at' => 'datetime', 'updated_at' => 'datetime', 'created_at' => 'datetime'];
     protected $fillable = [
         'parent_id', 'name', 'slug', 'children_count', 'depth', 'path', 
         'file_size', 'times_downloaded', 'resource_type', 'resource_module', 

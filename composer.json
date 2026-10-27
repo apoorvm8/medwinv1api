@@ -5,43 +5,42 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^8.0.2",
-        "butschster/meta-tags": "^2.3",
-        "cviebrock/eloquent-sluggable": "^9.0",
+        "php": "^8.4",
+        "butschster/meta-tags": "^3.3",
+        "cviebrock/eloquent-sluggable": "^13.0",
         "guzzlehttp/guzzle": "^7.2",
-        "laravel/framework": "^9.19",
-        "laravel/sanctum": "^3.0",
-        "laravel/tinker": "^2.7",
+        "hashids/hashids": "^5.0",
+        "laravel/framework": "^13.0",
+        "laravel/sanctum": "^4.0",
+        "laravel/tinker": "^3.0",
         "league/flysystem-aws-s3-v3": "^3.0",
-        "spatie/laravel-permission": "^5.9",
-        "spatie/laravel-searchable": "^1.11",
-        "stechstudio/laravel-zipstream": "^4.11",
-        "vinkla/hashids": "^10.0",
-        "yajra/laravel-datatables": "^9.0"
+        "maennchen/zipstream-php": "^2.4",
+        "spatie/laravel-permission": "^6.25",
+        "yajra/laravel-datatables-oracle": "^13.0"
     },
     "require-dev": {
-        "fakerphp/faker": "^1.9.1",
-        "laravel/pint": "^1.0",
-        "laravel/sail": "^1.0.1",
-        "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^6.1",
-        "phpunit/phpunit": "^9.5.10",
-        "spatie/laravel-ignition": "^1.0"
+        "fakerphp/faker": "^1.23",
+        "laravel/pint": "^1.24",
+        "laravel/sail": "^1.41",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.6",
+        "phpunit/phpunit": "^12.0",
+        "spatie/laravel-ignition": "^2.9"
     },
     "autoload": {
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\": "tests/"
         },
         "files": [
             "app/helpers.php"
         ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     },
     "scripts": {
         "post-autoload-dump": [
@@ -67,6 +66,9 @@
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true,
+        "platform": {
+            "php": "8.4.27"
+        },
         "allow-plugins": {
             "pestphp/pest-plugin": true
         }

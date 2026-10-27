@@ -16,7 +16,7 @@ class CustomerData extends Authenticatable
     protected $table = 'customer_data';
     protected $primaryKey = 'acctno';
     public $timestamps = false;    
-    protected $dates = ['created_at', 'updated_at'];
+    protected $casts = ['created_at' => 'datetime', 'updated_at' => 'datetime'];
 
     protected $fillable = [
         'acctno', 'subdesc', 'subadd1',

@@ -50,6 +50,19 @@ $kernel = $app->make(Kernel::class);
 
 $response = $kernel->handle(
     $request = Request::capture()
-)->send();
+);
+
+// File and folder downloads stream their headers and bytes straight to the output before this
+// response is sent. Symfony (since 6.3) re-sends the status line in that case, which PHP rejects
+// with a "headers already sent" warning; send only the body then, as Laravel 9 did.
+if (headers_sent()) {
+    $response->sendContent();
+
+    if (function_exists('fastcgi_finish_request')) {
+        fastcgi_finish_request();
+    }
+} else {
+    $response->send();
+}
 
 $kernel->terminate($request, $response);
